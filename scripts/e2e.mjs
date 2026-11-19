@@ -35,7 +35,7 @@ const orbAnimation = async () =>
     const orb = document.querySelector('.orb');
     return orb ? getComputedStyle(orb, '::before').animationName : 'none';
   });
-assert.equal(await orbAnimation(), 'orb-drift-a');
+assert.equal(await orbAnimation(), 'orb-spin');
 const orbTransformA = await page.evaluate(() => getComputedStyle(document.querySelector('.orb'), '::before').transform);
 await page.waitForTimeout(600);
 const orbTransformB = await page.evaluate(() => getComputedStyle(document.querySelector('.orb'), '::before').transform);

@@ -30,19 +30,19 @@ interface TodayViewProps {
 
 function orbColors(severity: number | null, quiet: boolean): string {
   if (quiet) {
-    if (severity === null) return '--orb-a:#d6b28e;--orb-b:#7a5638';
+    if (severity === null) return '--orb-a:#d6b28e;--orb-b:#7a5638;--orb-c:#b49a7f';
     const bucket = severityBucket(severity);
-    if (bucket === 'mild') return '--orb-a:#d0b08a;--orb-b:#86623f';
-    if (bucket === 'moderate') return '--orb-a:#dbab74;--orb-b:#91643b';
-    if (bucket === 'severe') return '--orb-a:#c98f73;--orb-b:#7b4633';
-    return '--orb-a:#c48a7d;--orb-b:#6c3b33';
+    if (bucket === 'mild') return '--orb-a:#d0b08a;--orb-b:#86623f;--orb-c:#b9a082';
+    if (bucket === 'moderate') return '--orb-a:#dbab74;--orb-b:#91643b;--orb-c:#c8a678';
+    if (bucket === 'severe') return '--orb-a:#c98f73;--orb-b:#7b4633;--orb-c:#b99279';
+    return '--orb-a:#c48a7d;--orb-b:#6c3b33;--orb-c:#b28a80';
   }
-  if (severity === null) return '--orb-a:#a9d9cf;--orb-b:#427e76';
+  if (severity === null) return '--orb-a:#a9d9cf;--orb-b:#427e76;--orb-c:#8fb6df';
   const bucket = severityBucket(severity);
-  if (bucket === 'mild') return '--orb-a:#b7ddcb;--orb-b:#568d77';
-  if (bucket === 'moderate') return '--orb-a:#e4c88d;--orb-b:#a17b45';
-  if (bucket === 'severe') return '--orb-a:#e3aa8c;--orb-b:#a95c4c';
-  return '--orb-a:#d99aa6;--orb-b:#8e3d50';
+  if (bucket === 'mild') return '--orb-a:#b7ddcb;--orb-b:#568d77;--orb-c:#96bdd9';
+  if (bucket === 'moderate') return '--orb-a:#e4c88d;--orb-b:#a17b45;--orb-c:#d2a0b4';
+  if (bucket === 'severe') return '--orb-a:#e3aa8c;--orb-b:#a95c4c;--orb-c:#cbb878';
+  return '--orb-a:#d99aa6;--orb-b:#8e3d50;--orb-c:#c3a0de';
 }
 
 export function TodayView({
