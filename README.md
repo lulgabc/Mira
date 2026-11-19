@@ -4,6 +4,10 @@
 
 Mira 是一个本地优先的偏头痛日历与用药记录应用。它把「记录」做得足够轻，把「洞察」做得足够克制：不评判、不催促、不上传。可安装为 PWA，也预留了 Capacitor 原生壳。
 
+**在线评测：** https://lulgabc.github.io/Mira/
+
+构建使用相对资源路径，同一份产物可部署到 GitHub Pages 子路径、自定义域名或 Capacitor 本地 WebView。推送 `main` 后由 `.github/workflows/deploy.yml` 自动构建并发布。
+
 <p align="center">
   <img src="docs/screenshots/02-today.png" width="210" alt="今天的头部状态与快速记录" />
   <img src="docs/screenshots/03-calendar.png" width="210" alt="发作日历" />
@@ -180,6 +184,14 @@ pnpm screenshots
 - 截图与 E2E 脚本使用本机 Google Chrome（`playwright-core` 的 `channel: 'chrome'`）。
 
 ## 移动端安装与原生打包
+
+### 部署到 GitHub Pages
+
+仓库已包含 `.github/workflows/deploy.yml`：推送到 `main` 后，GitHub Actions 会安装依赖、运行单元测试、构建，并发布 `dist` 到 Pages。
+
+- 生产构建使用相对资源路径（`base: './'`），因此 `/Mira/` 子路径、自定义域名和 Capacitor WebView 共用同一份产物。
+- Service Worker 作用域随部署路径变化；在 Pages 上为 `/Mira/`，离线缓存与安装均正常。
+- 线上地址：<https://lulgabc.github.io/Mira/>
 
 ### 作为 PWA 安装
 

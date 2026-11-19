@@ -13,7 +13,7 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
   );
   if (!isNative) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {
+      navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
         /* Offline support is optional; never block the app on it. */
       });
     });
