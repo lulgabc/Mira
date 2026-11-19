@@ -76,7 +76,6 @@ export function SettingsView({
           <div class="setting-row">
             <div class="setting-main">
               <div class="setting-label">{t('settings.quiet')}</div>
-              <div class="setting-desc">{t('settings.quietDesc')}</div>
             </div>
             <Switch
               checked={settings.quiet}

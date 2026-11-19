@@ -170,11 +170,6 @@ export function CalendarView({ data, lang, t, today, onAdd, onEdit }: CalendarVi
                 onClick={() => setSelected(cell.key as string)}
               >
                 <span class="cal-num">{cell.day}</span>
-                <span class="cal-dots" aria-hidden="true">
-                  {episodes.slice(0, 3).map((episode) => (
-                    <span key={episode.id} class="cal-dot" />
-                  ))}
-                </span>
               </button>
             );
           })}
