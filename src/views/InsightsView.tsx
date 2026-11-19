@@ -11,7 +11,6 @@ import {
 } from '../lib/stats';
 import type { AppData, Lang } from '../lib/types';
 import { TrendChart } from '../components/Charts';
-import { IconMedicine, IconSparkles } from '../components/Icons';
 
 interface InsightsViewProps {
   data: AppData;
@@ -22,6 +21,7 @@ interface InsightsViewProps {
 }
 
 type Period = 30 | 90 | 365;
+type Pattern = 'triggers' | 'symptoms' | 'meds';
 
 const PERIOD_KEYS: Record<Period, 'insights.period30' | 'insights.period90' | 'insights.period365'> = {
   30: 'insights.period30',
@@ -31,6 +31,7 @@ const PERIOD_KEYS: Record<Period, 'insights.period30' | 'insights.period90' | 'i
 
 export function InsightsView({ data, lang, t, today, onLog }: InsightsViewProps) {
   const [period, setPeriod] = useState<Period>(30);
+  const [pattern, setPattern] = useState<Pattern>('triggers');
 
   const stats = useMemo(() => {
     const to = today;
@@ -45,13 +46,7 @@ export function InsightsView({ data, lang, t, today, onLog }: InsightsViewProps)
   const { current, previous, from, to } = stats;
 
   const buckets = useMemo(
-    () =>
-      buildBuckets(
-        current.episodes,
-        from,
-        to,
-        period === 30 ? 30 : period === 90 ? 13 : 12,
-      ),
+    () => buildBuckets(current.episodes, from, to, period === 30 ? 30 : period === 90 ? 13 : 12),
     [current.episodes, from, to, period],
   );
 
@@ -67,28 +62,24 @@ export function InsightsView({ data, lang, t, today, onLog }: InsightsViewProps)
     return map;
   }, [data.symptoms, lang]);
 
-  const triggers = triggerRanking(current.episodes, triggerNames).slice(0, 5);
-  const symptoms = symptomRanking(current.episodes, symptomNames).slice(0, 5);
   const medNames = useMemo(() => {
     const map = new Map<string, string>();
     for (const item of data.meds) map.set(item.id, catalogName('med', item, lang));
     return map;
   }, [data.meds, lang]);
+
+  const triggers = triggerRanking(current.episodes, triggerNames).slice(0, 5);
+  const symptoms = symptomRanking(current.episodes, symptomNames).slice(0, 5);
   const meds = medRanking(current.episodes, medNames).slice(0, 4);
 
   if (data.episodes.length === 0) {
     return (
       <div class="view insights">
         <header class="view-head">
-          <p class="eyebrow">{t('insights.eyebrow')}</p>
           <h1 class="page-title">{t('insights.title')}</h1>
           <p class="page-sub">{t('insights.subtitle')}</p>
         </header>
         <section class="card insight-card">
-          <span class="insight-top">
-            <IconSparkles size={14} />
-            {t('insights.summary')}
-          </span>
           <h2 class="insight-text">{t('insights.insightFirst')}</h2>
         </section>
         <div class="empty-inline" style="margin-top:16px">
@@ -123,7 +114,6 @@ export function InsightsView({ data, lang, t, today, onLog }: InsightsViewProps)
   return (
     <div class="view insights">
       <header class="view-head">
-        <p class="eyebrow">{t('insights.eyebrow')}</p>
         <h1 class="page-title">{t('insights.title')}</h1>
         <p class="page-sub">{t('insights.subtitle')}</p>
       </header>
@@ -144,13 +134,9 @@ export function InsightsView({ data, lang, t, today, onLog }: InsightsViewProps)
       </div>
 
       <section class="card insight-card">
-        <span class="insight-top">
-          <IconSparkles size={14} />
-          {t('insights.summary')}
-        </span>
         <h2 class="insight-text">{headline}</h2>
         <p class="insight-sub">
-          {t(PERIOD_KEYS[period])} · {formatMonthDay(from, lang)} — {formatMonthDay(to, lang)}
+          {formatMonthDay(from, lang)} — {formatMonthDay(to, lang)}
         </p>
       </section>
 
@@ -221,110 +207,114 @@ export function InsightsView({ data, lang, t, today, onLog }: InsightsViewProps)
             />
           </section>
 
-          <section class="card chart-card" style="margin-top:12px" aria-labelledby="triggers-title">
+          <section class="card chart-card patterns-card" style="margin-top:12px" aria-labelledby="patterns-title">
             <div class="chart-head">
-              <h2 class="chart-title" id="triggers-title">
-                {t('insights.triggers')}
+              <h2 class="chart-title" id="patterns-title">
+                {t('insights.patterns')}
               </h2>
-              <span class="chart-note">{t('insights.triggerNote')}</span>
             </div>
-            {triggers.length === 0 ? (
-              <p class="rank-empty">{t('insights.noDataBody')}</p>
-            ) : (
-              <div class="rank-list">
-                {triggers.map((trigger) => (
-                  <div class="rank-row" key={trigger.id}>
-                    <div class="rank-top">
-                      <span class="rank-name">{trigger.name}</span>
-                      <span class="rank-value">
-                        {t(pluralKey('insights.triggerShare', trigger.count), { n: trigger.count })}
-                      </span>
-                    </div>
-                    <div class="rank-track">
-                      <div
-                        class="rank-fill"
-                        style={`width:${Math.max(4, (trigger.count / maxTrigger) * 100)}%`}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
+            <div class="tabs" role="tablist" aria-label={t('insights.patterns')}>
+              {(
+                [
+                  ['triggers', t('settings.triggers')],
+                  ['symptoms', t('settings.symptoms')],
+                  ['meds', t('insights.meds')],
+                ] as [Pattern, string][]
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  aria-selected={pattern === id}
+                  onClick={() => setPattern(id)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
 
-          <section class="card chart-card" style="margin-top:12px" aria-labelledby="symptoms-title">
-            <div class="chart-head">
-              <h2 class="chart-title" id="symptoms-title">
-                {t('insights.symptoms')}
-              </h2>
-            </div>
-            {symptoms.length === 0 ? (
-              <p class="rank-empty">{t('insights.noDataBody')}</p>
-            ) : (
-              <div class="rank-list">
-                {symptoms.map((symptom) => (
-                  <div class="rank-row" key={symptom.id}>
-                    <div class="rank-top">
-                      <span class="rank-name">{symptom.name}</span>
-                      <span class="rank-value">
-                        {t(pluralKey('insights.symptomShare', symptom.count), { n: symptom.count })}
-                      </span>
-                    </div>
-                    <div class="rank-track">
-                      <div
-                        class="rank-fill warm"
-                        style={`width:${Math.max(4, (symptom.count / maxSymptom) * 100)}%`}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-
-          <section class="card chart-card" style="margin-top:12px" aria-labelledby="meds-title">
-            <div class="chart-head">
-              <h2 class="chart-title" id="meds-title">
-                {t('insights.meds')}
-              </h2>
-            </div>
-            {meds.length === 0 ? (
-              <p class="rank-empty">{t('insights.noDataBody')}</p>
-            ) : (
-              <div class="med-list">
-                {meds.map((med) => (
-                  <div class="med-row" key={med.id}>
-                    <span class="med-icon" aria-hidden="true">
-                      <IconMedicine size={17} />
-                    </span>
-                    <div class="med-main">
-                      <div class="med-name">{med.name}</div>
-                      <div class="med-sub">
-                        {med.relief !== null
-                          ? t('insights.reliefAvg', {
-                              v:
-                                med.relief < 0.75
-                                  ? t('capture.relief.none')
-                                  : med.relief < 1.5
-                                    ? t('capture.relief.some')
-                                    : t('capture.relief.good'),
-                            })
-                          : t('insights.meds')}
-                      </div>
-                    </div>
-                    {med.relief !== null && (
-                      <span class="relief-dots" aria-hidden="true">
-                        {[0, 1, 2].map((index) => (
-                          <span
-                            key={index}
-                            class={`relief-dot${index < Math.round((med.relief as number) / 2 * 3) ? ' on' : ''}`}
+            {pattern === 'triggers' && (
+              <div role="tabpanel" class="tab-panel">
+                {triggers.length === 0 ? (
+                  <p class="rank-empty">{t('insights.noDataBody')}</p>
+                ) : (
+                  <div class="rank-list">
+                    {triggers.map((trigger) => (
+                      <div class="rank-row" key={trigger.id}>
+                        <div class="rank-top">
+                          <span class="rank-name">{trigger.name}</span>
+                          <span class="rank-value">
+                            {t(pluralKey('insights.triggerShare', trigger.count), { n: trigger.count })}
+                          </span>
+                        </div>
+                        <div class="rank-track">
+                          <div
+                            class="rank-fill"
+                            style={`width:${Math.max(4, (trigger.count / maxTrigger) * 100)}%`}
                           />
-                        ))}
-                      </span>
-                    )}
-                    <span class="rank-value">{t('insights.medsTimes', { n: med.count })}</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
+              </div>
+            )}
+
+            {pattern === 'symptoms' && (
+              <div role="tabpanel" class="tab-panel">
+                {symptoms.length === 0 ? (
+                  <p class="rank-empty">{t('insights.noDataBody')}</p>
+                ) : (
+                  <div class="rank-list">
+                    {symptoms.map((symptom) => (
+                      <div class="rank-row" key={symptom.id}>
+                        <div class="rank-top">
+                          <span class="rank-name">{symptom.name}</span>
+                          <span class="rank-value">
+                            {t(pluralKey('insights.symptomShare', symptom.count), { n: symptom.count })}
+                          </span>
+                        </div>
+                        <div class="rank-track">
+                          <div
+                            class="rank-fill"
+                            style={`width:${Math.max(4, (symptom.count / maxSymptom) * 100)}%`}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {pattern === 'meds' && (
+              <div role="tabpanel" class="tab-panel">
+                {meds.length === 0 ? (
+                  <p class="rank-empty">{t('insights.noDataBody')}</p>
+                ) : (
+                  <div class="med-list">
+                    {meds.map((med) => (
+                      <div class="med-row" key={med.id}>
+                        <div class="med-main">
+                          <div class="med-name">{med.name}</div>
+                          <div class="med-sub">
+                            {med.relief !== null
+                              ? t('insights.reliefAvg', {
+                                  v:
+                                    med.relief < 0.75
+                                      ? t('capture.relief.none')
+                                      : med.relief < 1.5
+                                        ? t('capture.relief.some')
+                                        : t('capture.relief.good'),
+                                })
+                              : t('insights.meds')}
+                          </div>
+                        </div>
+                        <span class="rank-value">{t('insights.medsTimes', { n: med.count })}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </section>

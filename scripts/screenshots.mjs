@@ -30,7 +30,8 @@ const shot = (name) => page.screenshot({ path: `${OUT}/${name}.png` });
 await page.goto(BASE, { waitUntil: 'networkidle' });
 await shot('01-welcome');
 await page.getByRole('button', { name: '先看看示例' }).click();
-await page.waitForTimeout(3000); // let the toast settle
+await page.waitForTimeout(3800); // let the toast settle
+await page.mouse.move(5, 5);
 await shot('02-today');
 
 await page.locator('.bottom-nav button', { hasText: '日历' }).click();
@@ -93,7 +94,8 @@ await page.locator('.dial').focus();
 await page.keyboard.press('End');
 await page.locator('.sheet-foot .btn-primary').click();
 await page.locator('dialog.sheet').waitFor({ state: 'detached' });
-await page.waitForTimeout(3000);
+await page.waitForTimeout(3200);
+await page.mouse.move(5, 5);
 await shot('11-active-attack');
 
 // The same day in English and Japanese.

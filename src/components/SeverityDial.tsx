@@ -128,18 +128,6 @@ export function SeverityDial({ value, onChange, t }: SeverityDialProps) {
           </linearGradient>
         </defs>
         <path class="dial-track" d={arcPath(START, START + SWEEP)} />
-        {Array.from({ length: 10 }, (_, i) => {
-          const point = polar(START + (i / 9) * SWEEP, RADIUS - 24);
-          return (
-            <circle
-              key={i}
-              class="dial-tick"
-              cx={point.x}
-              cy={point.y}
-              r={i === value - 1 ? 1.8 : 1.1}
-            />
-          );
-        })}
         <path
           class="dial-progress"
           stroke={`url(#${gradientId})`}
@@ -151,9 +139,6 @@ export function SeverityDial({ value, onChange, t }: SeverityDialProps) {
         <span class="dial-value">{value}</span>
         <span class="dial-desc">{description}</span>
       </div>
-      <p class="dial-hint" aria-hidden="true">
-        {t('severity.drag')}
-      </p>
     </div>
   );
 }

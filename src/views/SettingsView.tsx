@@ -2,16 +2,6 @@ import { useRef, useState } from 'preact/hooks';
 import type { Translate } from '../i18n';
 import { LANGS } from '../i18n';
 import type { AppData, Lang, Settings, ThemePref } from '../lib/types';
-import {
-  IconDatabase,
-  IconDownload,
-  IconMedicine,
-  IconPulse,
-  IconSparkles,
-  IconTrash,
-  IconUpload,
-} from '../components/Icons';
-import { LogoMark } from '../components/Icons';
 import { Switch } from '../components/Switch';
 
 interface SettingsViewProps {
@@ -62,7 +52,6 @@ export function SettingsView({
   return (
     <div class="view settings">
       <header class="view-head">
-        <p class="eyebrow">{t('settings.eyebrow')}</p>
         <h1 class="page-title">{t('settings.title')}</h1>
         <p class="page-sub">{t('settings.subtitle')}</p>
       </header>
@@ -71,16 +60,14 @@ export function SettingsView({
         <div class="settings-card">
           <div class="setting-row stack">
             <span class="setting-label">{t('settings.theme')}</span>
-            <div class="theme-row" role="group" aria-label={t('settings.theme')}>
+            <div class="segmented setting-seg" role="group" aria-label={t('settings.theme')}>
               {THEME_OPTIONS.map((option) => (
                 <button
                   key={option.id}
                   type="button"
-                  class="theme-option"
                   aria-pressed={settings.theme === option.id}
                   onClick={() => onUpdateSettings({ theme: option.id })}
                 >
-                  <span class={`theme-swatch ${option.id}`} aria-hidden="true" />
                   {t(option.key)}
                 </button>
               ))}
@@ -99,7 +86,7 @@ export function SettingsView({
           </div>
           <div class="setting-row stack">
             <span class="setting-label">{t('settings.language')}</span>
-            <div class="lang-seg" role="group" aria-label={t('settings.language')}>
+            <div class="segmented setting-seg" role="group" aria-label={t('settings.language')}>
               {LANGS.map((item) => (
                 <button
                   key={item.id}
@@ -116,43 +103,25 @@ export function SettingsView({
       </section>
 
       <section class="settings-group">
-        <div class="settings-group-head">
-          <h2 class="settings-group-title">{t('settings.catalogs')}</h2>
-          <span class="settings-group-note">{t('settings.catalogsDesc')}</span>
-        </div>
+        <h2 class="settings-group-title">{t('settings.catalogs')}</h2>
         <div class="settings-card">
           <button class="catalog-row" type="button" onClick={() => onOpenCatalog('med')}>
-            <span class="catalog-icon" aria-hidden="true">
-              <IconMedicine size={18} />
-            </span>
-            <span class="catalog-main">
-              <span class="catalog-name">{t('settings.meds')}</span>
-              <span class="catalog-count">{activeMeds}</span>
-            </span>
+            <span class="catalog-name">{t('settings.meds')}</span>
+            <span class="catalog-count">{activeMeds}</span>
             <span class="catalog-arrow" aria-hidden="true">
               ›
             </span>
           </button>
           <button class="catalog-row" type="button" onClick={() => onOpenCatalog('trigger')}>
-            <span class="catalog-icon" aria-hidden="true">
-              <IconSparkles size={18} />
-            </span>
-            <span class="catalog-main">
-              <span class="catalog-name">{t('settings.triggers')}</span>
-              <span class="catalog-count">{activeTriggers}</span>
-            </span>
+            <span class="catalog-name">{t('settings.triggers')}</span>
+            <span class="catalog-count">{activeTriggers}</span>
             <span class="catalog-arrow" aria-hidden="true">
               ›
             </span>
           </button>
           <button class="catalog-row" type="button" onClick={() => onOpenCatalog('symptom')}>
-            <span class="catalog-icon" aria-hidden="true">
-              <IconPulse size={18} />
-            </span>
-            <span class="catalog-main">
-              <span class="catalog-name">{t('settings.symptoms')}</span>
-              <span class="catalog-count">{activeSymptoms}</span>
-            </span>
+            <span class="catalog-name">{t('settings.symptoms')}</span>
+            <span class="catalog-count">{activeSymptoms}</span>
             <span class="catalog-arrow" aria-hidden="true">
               ›
             </span>
@@ -161,28 +130,18 @@ export function SettingsView({
       </section>
 
       <section class="settings-group">
-        <div class="settings-group-head">
-          <h2 class="settings-group-title">{t('settings.data')}</h2>
-          <span class="settings-group-note">{t('settings.countLine', { n: data.episodes.length, m: activeMeds })}</span>
-        </div>
+        <h2 class="settings-group-title">{t('settings.data')}</h2>
         <div class="settings-card">
           <div class="setting-row">
             <div class="setting-main">
-              <div class="setting-label">{t('settings.data')}</div>
               <div class="setting-desc">{t('settings.dataDesc')}</div>
             </div>
           </div>
           <div class="data-actions">
             <button class="data-btn" type="button" onClick={onExport}>
-              <span class="data-icon" aria-hidden="true">
-                <IconDownload size={17} />
-              </span>
               <span class="grow">{t('settings.export')}</span>
             </button>
             <button class="data-btn" type="button" onClick={() => fileRef.current?.click()}>
-              <span class="data-icon" aria-hidden="true">
-                <IconUpload size={17} />
-              </span>
               <span class="grow">{t('settings.import')}</span>
             </button>
             <input
@@ -198,9 +157,6 @@ export function SettingsView({
               }}
             />
             <button class="data-btn" type="button" onClick={() => setConfirmDemo(true)}>
-              <span class="data-icon" aria-hidden="true">
-                <IconDatabase size={17} />
-              </span>
               <span class="grow">{t('settings.demo')}</span>
             </button>
             {confirmDemo && (
@@ -224,9 +180,6 @@ export function SettingsView({
               </div>
             )}
             <button class="data-btn danger" type="button" onClick={() => setConfirmReset(true)}>
-              <span class="data-icon" aria-hidden="true">
-                <IconTrash size={17} />
-              </span>
               <span class="grow">{t('settings.reset')}</span>
             </button>
             {confirmReset && (
@@ -254,10 +207,10 @@ export function SettingsView({
       </section>
 
       <section class="settings-group">
+        <h2 class="settings-group-title">{t('settings.install')}</h2>
         <div class="settings-card">
           <div class="setting-row stack">
             <div class="setting-main">
-              <div class="setting-label">{t('settings.install')}</div>
               <div class="setting-desc">
                 {standalone
                   ? t('settings.installed')
@@ -276,7 +229,7 @@ export function SettingsView({
                 onClick={onInstall}
                 disabled={!canInstall}
               >
-                {t('settings.install')}
+                {t('settings.installAction')}
               </button>
             )}
           </div>
@@ -284,16 +237,13 @@ export function SettingsView({
       </section>
 
       <section class="settings-group">
-        <div class="settings-group-head">
-          <h2 class="settings-group-title">{t('settings.about')}</h2>
-        </div>
+        <h2 class="settings-group-title">{t('settings.about')}</h2>
         <div class="card about-card">
-          <div class="about-mark">
-            <LogoMark size={38} />
-          </div>
-          <div class="about-name">Mira</div>
-          <div class="about-version">
-            {t('settings.version')} 0.1.0
+          <div class="about-head">
+            <span class="about-name">Mira</span>
+            <span class="about-version">
+              {t('settings.version')} 0.1.0
+            </span>
           </div>
           <p class="about-privacy">{t('settings.privacy')}</p>
           <p class="about-disclaimer">{t('settings.disclaimer')}</p>

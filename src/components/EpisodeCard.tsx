@@ -13,7 +13,7 @@ interface EpisodeCardProps {
   onClick: () => void;
 }
 
-export function episodeMeta(episode: Episode, data: AppData, lang: Lang, t: Translate): string {
+export function episodeMeta(episode: Episode, data: AppData, lang: Lang): string {
   if (episode.meds.length > 0) {
     return episode.meds
       .map((med) => {
@@ -34,7 +34,7 @@ export function episodeMeta(episode: Episode, data: AppData, lang: Lang, t: Tran
   if (episode.end) {
     return formatDuration(minutesBetween(episode.start, episode.end), lang);
   }
-  return t('today.durationOngoing');
+  return '';
 }
 
 function relativeDay(key: string, lang: Lang, t: Translate): string {
@@ -51,9 +51,7 @@ export function EpisodeCard({ episode, data, lang, t, onClick }: EpisodeCardProp
 
   return (
     <button class="episode-row" type="button" onClick={onClick}>
-      <span class="sev-badge" data-level={level} aria-hidden="true">
-        {episode.severity}
-      </span>
+      <span class={`episode-dot ${level}`} aria-hidden="true" />
       <span class="episode-main">
         <span class="episode-top">
           <span class="episode-date">{relativeDay(dateKey, lang, t)}</span>
@@ -61,10 +59,13 @@ export function EpisodeCard({ episode, data, lang, t, onClick }: EpisodeCardProp
             {formatTime(episode.start, lang)} – {end}
           </span>
         </span>
-        <span class="episode-meta">{episodeMeta(episode, data, lang, t)}</span>
+        {episodeMeta(episode, data, lang) && (
+          <span class="episode-meta">{episodeMeta(episode, data, lang)}</span>
+        )}
       </span>
+      <span class="episode-sev">{episode.severity}/10</span>
       <span class="episode-arrow" aria-hidden="true">
-        <IconChevronRight size={17} />
+        <IconChevronRight size={16} />
       </span>
     </button>
   );

@@ -207,12 +207,13 @@ await page.locator('.header-actions .icon-btn').click();
 step('quiet mode persistence');
 
 // Manifest and icons.
-const manifest = await context.request.get(`${BASE}manifest.webmanifest`);
+const manifestUrl = new URL('manifest.webmanifest', BASE);
+const manifest = await context.request.get(manifestUrl.href);
 assert.equal(manifest.status(), 200);
 const manifestJson = await manifest.json();
 assert.equal(manifestJson.short_name, 'Mira');
 for (const icon of manifestJson.icons) {
-  const response = await context.request.get(`${BASE.replace(/\/$/, '')}${icon.src}`);
+  const response = await context.request.get(new URL(icon.src, manifestUrl).href);
   assert.equal(response.status(), 200, icon.src);
 }
 step('web app manifest + icons');

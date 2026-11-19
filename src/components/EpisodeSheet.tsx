@@ -1,6 +1,6 @@
 import { useState } from 'preact/hooks';
 import type { Translate } from '../i18n';
-import { catalogName, severityKey } from '../i18n';
+import { catalogName } from '../i18n';
 import {
   endAfterMinutes,
   fromDateTimeInput,
@@ -164,10 +164,9 @@ export function EpisodeSheet({
           <section class="form-section">
             <div class="form-label-row">
               <span class="form-label">{t('severity.label')}</span>
-              <span class="form-hint">{t('severity.hint')}</span>
+              <span class="form-hint">1–10</span>
             </div>
             <SeverityDial value={severity} onChange={setSeverity} t={t} />
-            <p class="sr-only">{t(severityKey(severity))}</p>
           </section>
 
           <section class="form-section">
@@ -247,11 +246,6 @@ export function EpisodeSheet({
                     aria-pressed={on}
                     onClick={() => toggle(item.id, symptomIds, setSymptomIds)}
                   >
-                    {on && (
-                      <span class="check" aria-hidden="true">
-                        <IconCheck size={10} strokeWidth={3} />
-                      </span>
-                    )}
                     {catalogName('symptom', item, lang)}
                   </button>
                 );
@@ -275,11 +269,6 @@ export function EpisodeSheet({
                     aria-pressed={on}
                     onClick={() => toggle(item.id, triggerIds, setTriggerIds)}
                   >
-                    {on && (
-                      <span class="check" aria-hidden="true">
-                        <IconCheck size={10} strokeWidth={3} />
-                      </span>
-                    )}
                     {catalogName('trigger', item, lang)}
                   </button>
                 );

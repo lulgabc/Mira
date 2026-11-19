@@ -269,17 +269,12 @@ export function App() {
 
   return (
     <div class="app-shell">
-      <div class="ambient" aria-hidden="true" />
-
       <header class="app-header">
         <div class="brand">
           <span class="brand-mark">
             <LogoMark size={26} />
           </span>
-          <span class="brand-text">
-            <span class="brand-name">Mira</span>
-            <span class="brand-tagline">{t('app.tagline')}</span>
-          </span>
+          <span class="brand-name">Mira</span>
         </div>
         <div class="header-actions">
           <button
@@ -316,7 +311,6 @@ export function App() {
             onEnd={endEpisode}
             onQuickMeds={(episode) => setQuickMedId(episode.id)}
             onLoadDemo={() => loadDemo(true)}
-            onOpenInsights={() => changeTab('insights')}
           />
         )}
         {tab === 'calendar' && (

@@ -89,7 +89,6 @@ export function CalendarView({ data, lang, t, today, onAdd, onEdit }: CalendarVi
   return (
     <div class="view calendar">
       <header class="view-head">
-        <p class="eyebrow">{t('calendar.eyebrow')}</p>
         <h1 class="page-title">{t('calendar.title')}</h1>
       </header>
 
@@ -176,7 +175,6 @@ export function CalendarView({ data, lang, t, today, onAdd, onEdit }: CalendarVi
         </div>
 
         <div class="cal-legend" aria-label={t('calendar.legend')}>
-          <span class="label">{t('calendar.legend')}</span>
           <span>
             <span class="legend-swatch" style="--sev:var(--sev-mild)" />
             {t('calendar.legendMild')}

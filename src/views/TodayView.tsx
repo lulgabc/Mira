@@ -13,7 +13,7 @@ import {
 import { computeStats, severityBucket } from '../lib/stats';
 import type { AppData, Episode, Lang } from '../lib/types';
 import { EpisodeCard } from '../components/EpisodeCard';
-import { IconMoon, IconPlus, IconSparkles } from '../components/Icons';
+import { IconPlus } from '../components/Icons';
 
 interface TodayViewProps {
   data: AppData;
@@ -26,7 +26,6 @@ interface TodayViewProps {
   onEnd: (id: string) => void;
   onQuickMeds: (episode: Episode) => void;
   onLoadDemo: () => void;
-  onOpenInsights: () => void;
 }
 
 function orbColors(severity: number | null, quiet: boolean): string {
@@ -57,10 +56,10 @@ export function TodayView({
   onEnd,
   onQuickMeds,
   onLoadDemo,
-  onOpenInsights,
 }: TodayViewProps) {
   const [now, setNow] = useState(Date.now());
   const active = data.episodes.find((episode) => !episode.end) ?? null;
+  const activeToday = Boolean(active && dayKeyOf(active.start) === today);
   const todayEpisodes = data.episodes.filter((episode) => dayKeyOf(episode.start) === today);
   const recent = [...data.episodes].sort((a, b) => b.start.localeCompare(a.start)).slice(0, 3);
   const latest = recent[0];
@@ -91,17 +90,12 @@ export function TodayView({
             {greeting}
             {lang === 'en' ? '.' : '。'}
           </h1>
-          <p class="today-question">{t('today.question')}</p>
         </div>
       </header>
 
       <section class="card hero-card" aria-labelledby="hero-title">
         <div class="hero-grid">
           <div class="hero-copy">
-            <span class="hero-kicker">
-              <IconMoon size={13} />
-              {t('today.monthTitle')}
-            </span>
             <h2 class="hero-title" id="hero-title">
               {todayEpisodes.length
                 ? t(
@@ -112,19 +106,23 @@ export function TodayView({
                   )
                 : t('today.quietDay')}
             </h2>
-            <p class="hero-sub">
-              {todayEpisodes.length && todayLatest
-                ? `${formatTime(todayLatest.start, lang)} · ${t(severityKey(todayMaxSeverity ?? todayLatest.severity))}`
-                : sinceLast
-                  ? t(sinceLast === 1 ? 'today.sinceLast.one' : 'today.sinceLast.other', { n: sinceLast })
-                  : t('today.firstRecord')}
-            </p>
-            <div class="hero-actions">
-              <button class="btn btn-primary" type="button" onClick={() => onLog({ ongoing: true })}>
-                <IconPlus size={18} />
-                {t('today.log')}
-              </button>
-            </div>
+            {!activeToday && (
+              <p class="hero-sub">
+                {todayEpisodes.length && todayLatest
+                  ? `${formatTime(todayLatest.start, lang)} · ${t(severityKey(todayMaxSeverity ?? todayLatest.severity))}`
+                  : sinceLast
+                    ? t(sinceLast === 1 ? 'today.sinceLast.one' : 'today.sinceLast.other', { n: sinceLast })
+                    : t('today.firstRecord')}
+              </p>
+            )}
+            {!active && (
+              <div class="hero-actions">
+                <button class="btn btn-primary" type="button" onClick={() => onLog({ ongoing: true })}>
+                  <IconPlus size={18} />
+                  {t('today.log')}
+                </button>
+              </div>
+            )}
           </div>
           <div
             class={`orb${todayEpisodes.length ? ' is-attack' : ' is-calm'}`}
@@ -187,14 +185,9 @@ export function TodayView({
       </div>
 
       <section class="section" aria-labelledby="recent-title">
-        <div class="section-head">
-          <h2 class="section-title" id="recent-title">
-            {t('today.recent')}
-          </h2>
-          <button class="text-btn" type="button" onClick={onOpenInsights}>
-            {t('today.viewInsights')}
-          </button>
-        </div>
+        <h2 class="section-title" id="recent-title">
+          {t('today.recent')}
+        </h2>
         {recent.length === 0 ? (
           <div class="empty-inline">
             <strong>{t('today.emptyTitle')}</strong>
@@ -219,15 +212,6 @@ export function TodayView({
         )}
       </section>
 
-      <aside class="tip-card">
-        <span class="tip-icon" aria-hidden="true">
-          <IconSparkles size={18} />
-        </span>
-        <div>
-          <p class="tip-label">{t('today.tipTitle')}</p>
-          <p class="tip-text">{t('today.tip')}</p>
-        </div>
-      </aside>
     </div>
   );
 }
