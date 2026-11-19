@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f4f1e9" id="meta-theme-color" />
+    <meta name="description" content="Mira — 一盏安静的灯，照看你的偏头痛节律。记录发作、用药与诱因，看见自己的趋势。" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Mira" />
+    <title>Mira · 偏头痛日记</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/icon-180.png" />
+    <script>
+      // Resolve theme before first paint to avoid a bright flash.
+      (function () {
+        try {
+          var saved = JSON.parse(localStorage.getItem('mira.settings.v1') || 'null');
+          var pref = (saved && saved.theme) || 'auto';
+          var dark = pref === 'dark' || (pref === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+          var quiet = !!(saved && saved.quiet);
+          if (quiet) dark = true;
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+          if (quiet) document.documentElement.dataset.quiet = 'true';
+          if (saved && saved.lang) document.documentElement.lang = saved.lang === 'zh' ? 'zh-CN' : saved.lang;
+          var meta = document.getElementById('meta-theme-color');
+          if (meta) meta.setAttribute('content', quiet ? '#0b0806' : dark ? '#0d0f12' : '#f4f1e9');
+          var statusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+          if (statusBar) statusBar.setAttribute('content', dark ? 'black-translucent' : 'default');
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Mira">
+  <defs>
+    <linearGradient id="ring" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#9683d5"/>
+      <stop offset=".45" stop-color="#7ed3c6"/>
+      <stop offset="1" stop-color="#dba679"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".72" cy=".2" r=".7">
+      <stop offset="0" stop-color="#46a094" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#46a094" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="120" fill="#0d0f12"/>
+  <rect width="512" height="512" rx="120" fill="url(#glow)"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="url(#ring)" stroke-width="33"
+    stroke-linecap="round" stroke-dasharray="925 80" transform="rotate(90 256 256)"/>
+  <circle cx="256" cy="256" r="29" fill="#f4e7d5"/>
+</svg>

@@ -1,0 +1,41 @@
+{
+  "name": "mira",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Mira — a calm, local-first migraine diary",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node scripts/e2e.mjs",
+    "test:offline": "node scripts/offline-check.mjs",
+    "screenshots": "node scripts/screenshots.mjs",
+    "icons": "node scripts/gen-icons.mjs",
+    "cap:add:ios": "pnpm build && cap add ios",
+    "cap:add:android": "pnpm build && cap add android",
+    "cap:sync": "pnpm build && cap sync",
+    "cap:ios": "cap open ios",
+    "cap:android": "cap open android",
+    "test:a11y": "node scripts/a11y-check.mjs",
+    "test:responsive": "node scripts/responsive-check.mjs"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.6.2",
+    "preact": "^11.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/cli": "^8.6.2",
+    "@capacitor/ios": "^8.6.2",
+    "@preact/preset-vite": "^2.10.6",
+    "@types/node": "^26.6.6",
+    "axe-core": "^4.14.1",
+    "playwright-core": "^1.65.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
+  }
+}

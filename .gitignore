@@ -14,6 +14,8 @@ build/
 target/
 __pycache__/
 *.pyc
+coverage/
+.vite/
 
 # 日志
 *.log
@@ -22,3 +24,15 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# 测试 / 截图临时文件
+test-results/
+playwright-report/
+
+# Capacitor 原生构建产物（平台目录按需生成）
+ios/App/Pods/
+ios/App/build/
+ios/App/App/public/
+android/.gradle/
+android/build/
+android/app/build/
