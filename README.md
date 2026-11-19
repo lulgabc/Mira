@@ -22,8 +22,8 @@ Mira 是一个本地优先的偏头痛日历与用药记录应用。它把「记
 
 <p align="center">
   <img src="docs/screenshots/11-active-attack.png" width="210" alt="正在发作的实时计时与快速服药" />
-  <img src="docs/screenshots/12-today-en.png" width="210" alt="英文界面" />
-  <img src="docs/screenshots/13-today-ja.png" width="210" alt="日文界面" />
+  <img src="docs/screenshots/12-today-de.png" width="210" alt="德文界面" />
+  <img src="docs/screenshots/13-today-zh-Hant.png" width="210" alt="繁體中文介面" />
 </p>
 
 ---
@@ -65,7 +65,7 @@ Mira 因此做了三件事：
 ### 洞察
 
 - 周期切换：近 30 天 / 90 天 / 一年。
-- 自动生成的中文、英文或日文小结：与前一个周期相比多/少几个发作日；没有足够数据时给出诚实的说明。
+- 自动生成的本地语言小结：与前一个周期相比多/少几个发作日；没有足够数据时给出诚实的说明。
 - 指标合并为一个 2×2 面板：发作日、平均强度、平均时长、用药日、连续无痛、发作日占比。
 - **每日强度图**（30 天）与发作趋势（90 天 / 一年），纯 SVG 绘制。
 - 诱因、症状、用药合并为同一个「模式」卡片的三个标签页，减少纵向卡片堆叠。
@@ -79,10 +79,10 @@ Mira 因此做了三件事：
 
 ### 多语言
 
-- 简体中文、English、日本語。
-- 首次启动按浏览器语言自动选择，也可在欢迎页或设置中即时切换。
-- 日期与月份通过 `Intl.DateTimeFormat` 本地化；药物、诱因、症状的内置名称也随之切换。
-- 单元测试会检查三种语言的 key 完整性与占位符一致性。
+- 简体中文、繁體中文、English、日本語、Français、Español、Deutsch、Italiano、Português。
+- 首次启动按浏览器语言自动选择（含繁中 / 港台地区识别），也可在欢迎页或设置中即时切换。
+- 日期、星期与月份通过 `Intl.DateTimeFormat` 本地化；药物、诱因、症状的内置名称也随之切换。
+- 单元测试会检查九种语言的 key 完整性、占位符一致性，以及所有内置清单译名。
 
 ### 静息模式
 
@@ -116,7 +116,7 @@ Mira 的视觉隐喻是「极光下的一只眼睛」：品牌符号是一个留
 - 原生 `<dialog>` 作为模态层，浏览器负责焦点约束、Esc、返回手势
 - 纯 SVG 图表；CSS 自定义属性驱动主题、强度色与静息模式
 - `localStorage` 本地持久化（`mira.data.v1` / `mira.settings.v1`），JSON 备份导入 / 导出
-- 生产包约 **106 kB JS / 31 kB CSS**（gzip 后约 **33 kB / 7 kB**）
+- 生产包约 **165 kB JS / 31.5 kB CSS**（gzip 后约 **47 kB / 7.1 kB**）
 
 ### 数据模型
 
@@ -173,9 +173,9 @@ pnpm screenshots
 
 当前验证结果：
 
-- `pnpm test`：**4 个测试文件，22 个测试全部通过**。
+- `pnpm test`：**4 个测试文件，24 个测试全部通过**。
 - `pnpm build`：TypeScript 无错误，构建成功。
-- `node scripts/e2e.mjs`：**19 项端到端检查通过**，无控制台错误。覆盖欢迎页、示例数据、Aura Dial、药物/剂量/缓解、进行中计时、快速服药、结束发作、日历编辑、两步删除、洞察图表、三语切换、主题与静息模式、导出、导入、清单增删改、清空数据、未来时间拦截、刷新持久化、清单与图标、PWA 快捷入口。
+- `node scripts/e2e.mjs`：**19 项端到端检查通过**，无控制台错误。覆盖欢迎页、示例数据、Aura Dial、药物/剂量/缓解、进行中计时、快速服药、结束发作、日历编辑、两步删除、洞察图表、欢迎页与设置中的多语切换、主题与静息模式、导出、导入、清单增删改、清空数据、未来时间拦截、刷新持久化、清单与图标、PWA 快捷入口。
 - `node scripts/offline-check.mjs`：Service Worker 接管页面后断网重载成功，示例数据仍在。
 - `node scripts/a11y-check.mjs`：用 axe-core 检查 12 个页面/状态（欢迎页、今日、日历、洞察、设置、记录弹层，以及深色与静息模式），**WCAG 2 A/AA 违规为 0**。
 - `node scripts/responsive-check.mjs`：在 320 / 375 / 430 / 768 / 1280 px 宽度下检查四个主页面与记录弹层，均无横向溢出。
@@ -245,9 +245,10 @@ docs/screenshots/         应用截图
 ## 多语言贡献
 
 1. 复制 `src/i18n/en.ts` 为新语言文件，补全相同的 key。
-2. 在 `src/i18n/index.ts` 的 `dictionaries` 与 `LANGS` 中注册。
-3. 在 `src/lib/types.ts` 的 `Lang` 中加入语言代码，并在 `index.html` 的早期主题脚本中补充语言映射。
-4. 运行 `pnpm test`：key 完整性、占位符一致性测试必须通过。
+2. 在 `src/i18n/index.ts` 的 `dictionaries` 与 `LANGS` 中注册，并补上 `localeOf` 映射。
+3. 在 `src/lib/types.ts` 的 `Lang` 中加入语言代码；在 `src/lib/dates.ts` 补充 `LOCALES`、`UNITS` 与日期分支；在 `CalendarView` 补充星期缩写。
+4. 在 `index.html` 的早期脚本中补充语言 → locale 映射。
+5. 运行 `pnpm test`：九语 key 完整性、占位符一致性、内置清单译名与日期格式测试必须通过。
 
 ## 隐私与安全
 
@@ -260,5 +261,5 @@ docs/screenshots/         应用截图
 
 - 单设备本地存储，无跨设备同步；这是刻意的隐私取舍，可通过 JSON 备份迁移。
 - 没有推送提醒与服药提醒，避免把头痛变成另一套待办系统。
-- 当前提供中 / 英 / 日三语；新增语言按上文步骤扩展。
+- 当前提供九种语言：简中、繁中、英、日、法、西、德、意、葡；新增语言按上文步骤扩展。
 - 原生平台仅完成配置与同步路径，尚未附带签名、商店元数据与原生启动图。

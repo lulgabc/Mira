@@ -528,27 +528,10 @@ dialog.welcome[open] {
   font-size: 11px;
   color: var(--text-3);
 }
-.welcome-lang {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  padding: 3px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-xs);
-  background: var(--surface-2);
-}
-.welcome-lang button {
-  min-height: 40px;
-  border: 0;
-  border-radius: 7px;
-  background: transparent;
-  color: var(--text-3);
-  font-size: 12.5px;
-}
-.welcome-lang button[aria-pressed='true'] {
-  background: var(--surface);
-  color: var(--text);
-  font-weight: 600;
+.welcome-select {
+  width: 100%;
+  min-height: 44px;
+  font-size: 13.5px;
 }
 .welcome-actions {
   display: grid;

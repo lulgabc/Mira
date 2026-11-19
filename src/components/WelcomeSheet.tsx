@@ -24,18 +24,18 @@ export function WelcomeSheet({ lang, t, onLang, onStart, onDemo }: WelcomeSheetP
         </h2>
         <p class="welcome-body">{t('welcome.body')}</p>
         <p class="welcome-lang-label">{t('welcome.language')}</p>
-        <div class="welcome-lang" role="group" aria-label={t('welcome.language')}>
+        <select
+          class="select welcome-select"
+          value={lang}
+          aria-label={t('welcome.language')}
+          onChange={(event) => onLang(event.currentTarget.value as Lang)}
+        >
           {LANGS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              aria-pressed={lang === item.id}
-              onClick={() => onLang(item.id)}
-            >
+            <option key={item.id} value={item.id}>
               {item.label}
-            </button>
+            </option>
           ))}
-        </div>
+        </select>
         <div class="welcome-actions">
           <button class="btn btn-primary btn-block" type="button" onClick={onStart}>
             {t('welcome.start')}

@@ -5,8 +5,10 @@ import {
   dayKeyOf,
   diffDays,
   endAfterMinutes,
+  formatDayTitle,
   formatDuration,
   formatElapsed,
+  formatFullDate,
   fromDateTimeInput,
   minutesBetween,
   parseDayKey,
@@ -32,6 +34,19 @@ describe('dates', () => {
     expect(input).toBe('2026-11-19T08:05');
     expect(fromDateTimeInput(input)).toBe(iso);
     expect(fromDateTimeInput('not-a-date')).toBeNull();
+  });
+
+  it('formats dates in every supported locale', () => {
+    const date = new Date(2026, 10, 19);
+    expect(formatFullDate(date, 'fr')).toMatch(/novembre/);
+    expect(formatFullDate(date, 'es')).toMatch(/noviembre/);
+    expect(formatFullDate(date, 'de')).toMatch(/November/);
+    expect(formatFullDate(date, 'it')).toMatch(/novembre/);
+    expect(formatFullDate(date, 'pt')).toMatch(/novembro/);
+    expect(formatFullDate(date, 'zh-Hant')).toContain('11月19日');
+    expect(formatFullDate(date, 'zh-Hant')).toContain('星期四');
+    expect(formatDayTitle('2026-11-16', 'de')).toMatch(/16/);
+    expect(formatDayTitle('2026-11-16', 'fr')).toMatch(/16/);
   });
 
   it('computes durations and presets', () => {

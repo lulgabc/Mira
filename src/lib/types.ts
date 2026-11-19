@@ -1,4 +1,4 @@
-export type Lang = 'zh' | 'en' | 'ja';
+export type Lang = 'zh' | 'zh-Hant' | 'en' | 'ja' | 'fr' | 'es' | 'de' | 'it' | 'pt';
 export type ThemePref = 'auto' | 'light' | 'dark';
 export type Tab = 'today' | 'calendar' | 'insights' | 'settings';
 export type Relief = 0 | 1 | 2;

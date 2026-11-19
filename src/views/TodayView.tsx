@@ -88,7 +88,7 @@ export function TodayView({
           <p class="eyebrow today-date">{formatFullDate(new Date(), lang)}</p>
           <h1 class="today-greeting">
             {greeting}
-            {lang === 'en' ? '.' : '。'}
+            {lang === 'zh' || lang === 'zh-Hant' || lang === 'ja' ? '。' : '.'}
           </h1>
         </div>
       </header>

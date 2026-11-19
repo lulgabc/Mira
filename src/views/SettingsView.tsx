@@ -84,20 +84,20 @@ export function SettingsView({
               onChange={(quiet) => onUpdateSettings({ quiet })}
             />
           </div>
-          <div class="setting-row stack">
+          <div class="setting-row">
             <span class="setting-label">{t('settings.language')}</span>
-            <div class="segmented setting-seg" role="group" aria-label={t('settings.language')}>
+            <select
+              class="select lang-select"
+              value={lang}
+              aria-label={t('settings.language')}
+              onChange={(event) => onUpdateSettings({ lang: event.currentTarget.value as Lang })}
+            >
               {LANGS.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  aria-pressed={lang === item.id}
-                  onClick={() => onUpdateSettings({ lang: item.id })}
-                >
+                <option key={item.id} value={item.id}>
                   {item.label}
-                </button>
+                </option>
               ))}
-            </div>
+            </select>
           </div>
         </div>
       </section>

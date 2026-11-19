@@ -24,7 +24,8 @@
           if (quiet) dark = true;
           document.documentElement.dataset.theme = dark ? 'dark' : 'light';
           if (quiet) document.documentElement.dataset.quiet = 'true';
-          if (saved && saved.lang) document.documentElement.lang = saved.lang === 'zh' ? 'zh-CN' : saved.lang;
+          var locales = { zh: 'zh-CN', 'zh-Hant': 'zh-TW', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR', es: 'es-ES', de: 'de-DE', it: 'it-IT', pt: 'pt-BR' };
+          if (saved && saved.lang) document.documentElement.lang = locales[saved.lang] || 'zh-CN';
           var meta = document.getElementById('meta-theme-color');
           if (meta) meta.setAttribute('content', quiet ? '#0b0806' : dark ? '#0d0f12' : '#f4f1e9');
           var statusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');

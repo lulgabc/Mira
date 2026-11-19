@@ -1,11 +1,9 @@
 import { defaultCatalogs } from './catalog';
-import { detectLang } from '../i18n';
+import { LANGS, detectLang } from '../i18n';
 import type { AppData, CatalogItem, Episode, EpisodeMed, Lang, Settings } from './types';
 
 export const DATA_KEY = 'mira.data.v1';
 export const SETTINGS_KEY = 'mira.settings.v1';
-
-const LANGS: Lang[] = ['zh', 'en', 'ja'];
 
 export function emptyData(): AppData {
   const catalogs = defaultCatalogs();
@@ -133,7 +131,7 @@ export function loadSettings(storage?: Storage): Settings {
   const raw = safeParse(store?.getItem(SETTINGS_KEY) ?? null);
   const defaults = defaultSettings();
   if (!isRecord(raw)) return defaults;
-  const lang = LANGS.includes(raw.lang as Lang) ? (raw.lang as Lang) : defaults.lang;
+  const lang = LANGS.some((entry) => entry.id === raw.lang) ? (raw.lang as Lang) : defaults.lang;
   const theme = raw.theme === 'light' || raw.theme === 'dark' ? raw.theme : 'auto';
   return {
     lang,

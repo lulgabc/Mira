@@ -98,19 +98,19 @@ await page.waitForTimeout(3200);
 await page.mouse.move(5, 5);
 await shot('11-active-attack');
 
-// The same day in English and Japanese.
+// The same day in German and Traditional Chinese.
 await page.locator('.bottom-nav button', { hasText: '设置' }).click();
-await page.getByRole('button', { name: 'English' }).click();
+await page.locator('.lang-select').selectOption('de');
 await page.waitForTimeout(400);
-await page.locator('.bottom-nav button', { hasText: 'Today' }).click();
+await page.locator('.bottom-nav button', { hasText: 'Heute' }).click();
 await page.waitForTimeout(250);
-await shot('12-today-en');
-await page.locator('.bottom-nav button', { hasText: 'Settings' }).click();
-await page.getByRole('button', { name: '日本語' }).click();
+await shot('12-today-de');
+await page.locator('.bottom-nav button', { hasText: 'Einstellungen' }).click();
+await page.locator('.lang-select').selectOption('zh-Hant');
 await page.waitForTimeout(400);
-await page.locator('.bottom-nav button', { hasText: '今日' }).click();
+await page.locator('.bottom-nav button', { hasText: '今天' }).click();
 await page.waitForTimeout(250);
-await shot('13-today-ja');
+await shot('13-today-zh-Hant');
 
 console.log(JSON.stringify({ errors }, null, 2));
 await browser.close();

@@ -10,6 +10,7 @@ import {
   saveSettings,
   serializeBackup,
 } from '../src/lib/storage';
+import { LANGS } from '../src/i18n';
 import type { Episode } from '../src/lib/types';
 
 class MemoryStorage implements Storage {
@@ -55,7 +56,7 @@ describe('storage', () => {
     expect(data.meds).toHaveLength(6);
     expect(data.triggers.length).toBeGreaterThan(0);
     expect(data.symptoms.length).toBeGreaterThan(0);
-    expect(['zh', 'en', 'ja']).toContain(loadSettings(storage).lang);
+    expect(LANGS.map((entry) => entry.id)).toContain(loadSettings(storage).lang);
   });
 
   it('round-trips data and settings', () => {
@@ -94,7 +95,7 @@ describe('storage', () => {
     const storage = new MemoryStorage();
     storage.setItem(SETTINGS_KEY, JSON.stringify({ lang: 'fr', theme: 'neon', quiet: 'yes' }));
     const settings = loadSettings(storage);
-    expect(['zh', 'en', 'ja']).toContain(settings.lang);
+    expect(LANGS.map((entry) => entry.id)).toContain(settings.lang);
     expect(settings).toMatchObject({ theme: 'auto', quiet: false, onboarded: false });
   });
 

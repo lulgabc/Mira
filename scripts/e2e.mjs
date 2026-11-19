@@ -21,6 +21,12 @@ const data = () => page.evaluate(() => JSON.parse(localStorage.getItem('mira.dat
 const step = (name) => console.log(`ok — ${name}`);
 
 await page.goto(BASE, { waitUntil: 'networkidle' });
+assert.equal(await page.locator('.welcome-select option').count(), 9);
+await page.locator('.welcome-select').selectOption('fr');
+await page.waitForFunction(() => document.documentElement.lang === 'fr-FR');
+assert.match(await page.locator('.welcome-title').innerText(), /Bienvenue/);
+await page.locator('.welcome-select').selectOption('zh');
+await page.waitForFunction(() => document.documentElement.lang === 'zh-CN');
 await page.getByRole('button', { name: '先看看示例' }).click();
 await page.waitForFunction(() => JSON.parse(localStorage.getItem('mira.data.v1') || '{}').episodes?.length > 10);
 assert.equal((await data()).episodes.length, 21);
@@ -103,16 +109,23 @@ step('insights chart + narrative');
 
 // Language switching.
 await page.locator('.bottom-nav button', { hasText: '设置' }).click();
-await page.getByRole('button', { name: 'English' }).click();
+assert.equal(await page.locator('.lang-select option').count(), 9);
+await page.locator('.lang-select').selectOption('en');
 await page.waitForFunction(() => document.documentElement.lang.startsWith('en'));
 assert.match(await page.locator('.page-title').innerText(), /Settings/);
 assert.match(await page.locator('.bottom-nav').innerText(), /Insights/);
-await page.getByRole('button', { name: '日本語' }).click();
+await page.locator('.lang-select').selectOption('fr');
+await page.waitForFunction(() => document.documentElement.lang.startsWith('fr'));
+assert.match(await page.locator('.page-title').innerText(), /Réglages/);
+await page.locator('.lang-select').selectOption('ja');
 await page.waitForFunction(() => document.documentElement.lang.startsWith('ja'));
 assert.match(await page.locator('.page-title').innerText(), /設定/);
-await page.getByRole('button', { name: '中文' }).click();
+await page.locator('.lang-select').selectOption('zh-Hant');
+await page.waitForFunction(() => document.documentElement.lang === 'zh-TW');
+assert.match(await page.locator('.page-title').innerText(), /設定/);
+await page.locator('.lang-select').selectOption('zh');
 await page.waitForFunction(() => document.documentElement.lang === 'zh-CN');
-step('language switching zh → en → ja → zh');
+step('language switching zh → en → fr → ja → zh-Hant → zh');
 
 // Theme + quiet mode.
 await page.getByRole('button', { name: '深色' }).click();

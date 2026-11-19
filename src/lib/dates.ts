@@ -1,6 +1,16 @@
 import type { Lang } from './types';
 
-const LOCALES: Record<Lang, string> = { zh: 'zh-CN', en: 'en-US', ja: 'ja-JP' };
+const LOCALES: Record<Lang, string> = {
+  zh: 'zh-CN',
+  'zh-Hant': 'zh-TW',
+  en: 'en-US',
+  ja: 'ja-JP',
+  fr: 'fr-FR',
+  es: 'es-ES',
+  de: 'de-DE',
+  it: 'it-IT',
+  pt: 'pt-BR',
+};
 
 const dateTimeFormat = new Map<string, Intl.DateTimeFormat>();
 
@@ -87,8 +97,8 @@ export function formatMonthDay(key: string, lang: Lang): string {
 
 export function formatDayTitle(key: string, lang: Lang): string {
   const date = parseDayKey(key);
-  if (lang === 'zh') {
-    return `${date.getMonth() + 1}月${date.getDate()}日 · ${formatter(LOCALES.zh, {
+  if (lang === 'zh' || lang === 'zh-Hant') {
+    return `${date.getMonth() + 1}月${date.getDate()}日 · ${formatter(LOCALES[lang], {
       weekday: 'short',
     }).format(date)}`;
   }
@@ -97,12 +107,12 @@ export function formatDayTitle(key: string, lang: Lang): string {
       weekday: 'narrow',
     }).format(date)}）`;
   }
-  return formatter(LOCALES.en, { month: 'short', day: 'numeric', weekday: 'short' }).format(date);
+  return formatter(LOCALES[lang], { month: 'short', day: 'numeric', weekday: 'short' }).format(date);
 }
 
 export function formatFullDate(date: Date, lang: Lang): string {
-  if (lang === 'zh') {
-    return `${date.getMonth() + 1}月${date.getDate()}日 · ${formatter(LOCALES.zh, {
+  if (lang === 'zh' || lang === 'zh-Hant') {
+    return `${date.getMonth() + 1}月${date.getDate()}日 · ${formatter(LOCALES[lang], {
       weekday: 'long',
     }).format(date)}`;
   }
@@ -111,7 +121,7 @@ export function formatFullDate(date: Date, lang: Lang): string {
       weekday: 'short',
     }).format(date)}）`;
   }
-  return formatter(LOCALES.en, { month: 'long', day: 'numeric', weekday: 'long' }).format(date);
+  return formatter(LOCALES[lang], { month: 'long', day: 'numeric', weekday: 'long' }).format(date);
 }
 
 export function greetingKey(date: Date = new Date()): 'morning' | 'afternoon' | 'evening' | 'night' {
@@ -133,8 +143,14 @@ export function formatElapsed(ms: number): string {
 
 const UNITS: Record<Lang, { h: string; m: string; min: string; d: string }> = {
   zh: { h: '小时', m: '分', min: '分钟', d: '天' },
+  'zh-Hant': { h: '小時', m: '分', min: '分鐘', d: '天' },
   en: { h: 'h', m: 'm', min: 'min', d: 'd' },
   ja: { h: '時間', m: '分', min: '分', d: '日' },
+  fr: { h: 'h', m: 'min', min: 'min', d: 'j' },
+  es: { h: 'h', m: 'min', min: 'min', d: 'd' },
+  de: { h: 'Std.', m: 'Min.', min: 'Min.', d: 'T.' },
+  it: { h: 'h', m: 'min', min: 'min', d: 'g' },
+  pt: { h: 'h', m: 'min', min: 'min', d: 'd' },
 };
 
 export function formatDuration(minutes: number, lang: Lang): string {

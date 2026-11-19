@@ -1,20 +1,54 @@
 import type { CatalogItem, Lang } from '../lib/types';
+import { de } from './de';
 import { en } from './en';
+import { es } from './es';
+import { fr } from './fr';
+import { it } from './it';
 import { ja } from './ja';
+import { pt } from './pt';
+import { zhHant } from './zh-Hant';
 import { zh, type MessageKey, type Messages } from './zh';
 
 export type { MessageKey, Messages };
 
-export const dictionaries: Record<Lang, Messages> = { zh, en, ja };
+export const dictionaries: Record<Lang, Messages> = {
+  zh,
+  'zh-Hant': zhHant,
+  en,
+  ja,
+  fr,
+  es,
+  de,
+  it,
+  pt,
+};
 
 export const LANGS: { id: Lang; label: string; locale: string }[] = [
-  { id: 'zh', label: '中文', locale: 'zh-CN' },
+  { id: 'zh', label: '简体中文', locale: 'zh-CN' },
+  { id: 'zh-Hant', label: '繁體中文', locale: 'zh-TW' },
   { id: 'en', label: 'English', locale: 'en-US' },
   { id: 'ja', label: '日本語', locale: 'ja-JP' },
+  { id: 'fr', label: 'Français', locale: 'fr-FR' },
+  { id: 'es', label: 'Español', locale: 'es-ES' },
+  { id: 'de', label: 'Deutsch', locale: 'de-DE' },
+  { id: 'it', label: 'Italiano', locale: 'it-IT' },
+  { id: 'pt', label: 'Português', locale: 'pt-BR' },
 ];
 
+const LOCALES: Record<Lang, string> = {
+  zh: 'zh-CN',
+  'zh-Hant': 'zh-TW',
+  en: 'en-US',
+  ja: 'ja-JP',
+  fr: 'fr-FR',
+  es: 'es-ES',
+  de: 'de-DE',
+  it: 'it-IT',
+  pt: 'pt-BR',
+};
+
 export function localeOf(lang: Lang): string {
-  return lang === 'zh' ? 'zh-CN' : lang === 'ja' ? 'ja-JP' : 'en-US';
+  return LOCALES[lang];
 }
 
 export function translate(
@@ -60,8 +94,18 @@ export function detectLang(): Lang {
   const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
   for (const candidate of languages) {
     const lower = candidate.toLowerCase();
-    if (lower.startsWith('zh')) return 'zh';
+    if (lower.startsWith('zh')) {
+      if (lower.includes('hant') || lower.includes('tw') || lower.includes('hk') || lower.includes('mo')) {
+        return 'zh-Hant';
+      }
+      return 'zh';
+    }
     if (lower.startsWith('ja')) return 'ja';
+    if (lower.startsWith('fr')) return 'fr';
+    if (lower.startsWith('es')) return 'es';
+    if (lower.startsWith('de')) return 'de';
+    if (lower.startsWith('it')) return 'it';
+    if (lower.startsWith('pt')) return 'pt';
     if (lower.startsWith('en')) return 'en';
   }
   return 'en';

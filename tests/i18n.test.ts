@@ -3,14 +3,16 @@ import {
   catalogName,
   detectLang,
   dictionaries,
+  localeOf,
   pluralKey,
   severityKey,
   translate,
   translator,
 } from '../src/i18n';
+import { LANGS } from '../src/i18n';
 import { MED_KEYS, SYMPTOM_KEYS, TRIGGER_KEYS } from '../src/lib/catalog';
 
-const languages = ['zh', 'en', 'ja'] as const;
+const languages = LANGS.map((entry) => entry.id);
 
 function placeholders(template: string): string[] {
   return [...template.matchAll(/\{(\w+)\}/g)].map((match) => match[1] ?? '').sort();
@@ -53,22 +55,30 @@ describe('i18n', () => {
     expect(pluralKey('insights.insightMore', 3)).toBe('insights.insightMore.other');
   });
 
-  it('resolves built-in and custom catalog names', () => {
-    for (const key of MED_KEYS) {
-      expect(catalogName('med', { id: `med-${key}`, key }, 'en')).not.toBe(key);
-      expect(catalogName('med', { id: `med-${key}`, key }, 'zh')).not.toBe(key);
-    }
-    for (const key of TRIGGER_KEYS) {
-      expect(catalogName('trigger', { id: `trg-${key}`, key }, 'ja')).not.toBe(key);
-    }
-    for (const key of SYMPTOM_KEYS) {
-      expect(catalogName('symptom', { id: `sym-${key}`, key }, 'en')).not.toBe(key);
+  it('resolves built-in and custom catalog names in every language', () => {
+    for (const lang of languages) {
+      for (const key of MED_KEYS) {
+        expect(catalogName('med', { id: `med-${key}`, key }, lang)).not.toBe(key);
+      }
+      for (const key of TRIGGER_KEYS) {
+        expect(catalogName('trigger', { id: `trg-${key}`, key }, lang)).not.toBe(key);
+      }
+      for (const key of SYMPTOM_KEYS) {
+        expect(catalogName('symptom', { id: `sym-${key}`, key }, lang)).not.toBe(key);
+      }
     }
     expect(catalogName('med', { id: 'med-custom', label: 'My pill' }, 'zh')).toBe('My pill');
     expect(catalogName('trigger', { id: 'trg-custom' }, 'en')).toBe('trg-custom');
   });
 
+  it('registers nine distinct languages and locales', () => {
+    expect(languages).toHaveLength(9);
+    expect(new Set(LANGS.map((entry) => entry.locale)).size).toBe(9);
+    expect(localeOf('de')).toBe('de-DE');
+    expect(localeOf('zh-Hant')).toBe('zh-TW');
+  });
+
   it('detects a supported language from the browser', () => {
-    expect(['zh', 'en', 'ja']).toContain(detectLang());
+    expect(languages).toContain(detectLang());
   });
 });

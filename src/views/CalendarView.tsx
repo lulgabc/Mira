@@ -17,8 +17,14 @@ interface CalendarViewProps {
 
 const WEEKDAYS: Record<Lang, string[]> = {
   zh: ['一', '二', '三', '四', '五', '六', '日'],
+  'zh-Hant': ['一', '二', '三', '四', '五', '六', '日'],
   en: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
   ja: ['月', '火', '水', '木', '金', '土', '日'],
+  fr: ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'],
+  es: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
+  de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+  it: ['Lu', 'Ma', 'Me', 'Gi', 'Ve', 'Sa', 'Do'],
+  pt: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
 };
 
 function sameMonth(date: Date, key: string): boolean {
