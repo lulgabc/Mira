@@ -5,7 +5,7 @@ import type { AppData, Lang, Settings, ThemePref } from '../lib/types';
 import {
   IconDatabase,
   IconDownload,
-  IconPill,
+  IconMedicine,
   IconPulse,
   IconSparkles,
   IconTrash,
@@ -123,7 +123,7 @@ export function SettingsView({
         <div class="settings-card">
           <button class="catalog-row" type="button" onClick={() => onOpenCatalog('med')}>
             <span class="catalog-icon" aria-hidden="true">
-              <IconPill size={18} />
+              <IconMedicine size={18} />
             </span>
             <span class="catalog-main">
               <span class="catalog-name">{t('settings.meds')}</span>

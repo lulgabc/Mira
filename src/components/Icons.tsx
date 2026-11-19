@@ -139,11 +139,11 @@ export function IconMoon(props: IconProps) {
   );
 }
 
-export function IconPill(props: IconProps) {
+export function IconMedicine(props: IconProps) {
   return (
     <Svg {...props}>
-      <rect x="2.8" y="8.4" width="18.4" height="7.2" rx="3.6" />
-      <path d="M12 8.4v7.2" opacity=".55" />
+      <path d="M9 3.5h6v3.2l1.4 1.5c.7.7 1.1 1.7 1.1 2.7V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 5.5 19v-8.1c0-1 .4-2 1.1-2.7L8 6.7V3.5Z" />
+      <path d="M8.5 11.5h7M9 3.5h6" opacity=".55" />
     </Svg>
   );
 }

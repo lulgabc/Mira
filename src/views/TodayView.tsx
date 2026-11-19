@@ -13,7 +13,7 @@ import {
 import { computeStats, severityBucket } from '../lib/stats';
 import type { AppData, Episode, Lang } from '../lib/types';
 import { EpisodeCard } from '../components/EpisodeCard';
-import { IconMoon, IconPill, IconPlus, IconSparkles } from '../components/Icons';
+import { IconMoon, IconPlus, IconSparkles } from '../components/Icons';
 
 interface TodayViewProps {
   data: AppData;
@@ -93,12 +93,6 @@ export function TodayView({
           </h1>
           <p class="today-question">{t('today.question')}</p>
         </div>
-        {todayEpisodes.length > 0 && (
-          <span class="today-count-pill">
-            <span class="dot" aria-hidden="true" />
-            {t('today.todayCount', { n: todayEpisodes.length })}
-          </span>
-        )}
       </header>
 
       <section class="card hero-card" aria-labelledby="hero-title">
@@ -110,7 +104,12 @@ export function TodayView({
             </span>
             <h2 class="hero-title" id="hero-title">
               {todayEpisodes.length
-                ? t('today.todayCount', { n: todayEpisodes.length })
+                ? t(
+                    todayEpisodes.length === 1
+                      ? 'today.todayCount.one'
+                      : 'today.todayCount.other',
+                    { n: todayEpisodes.length },
+                  )
                 : t('today.quietDay')}
             </h2>
             <p class="hero-sub">
@@ -154,7 +153,7 @@ export function TodayView({
           </div>
           <div class="active-actions">
             <button class="btn btn-soft" type="button" onClick={() => onQuickMeds(active)}>
-              <IconPill size={16} />
+              <IconPlus size={16} />
               {t('today.addMed')}
             </button>
             <button class="btn btn-ghost" type="button" onClick={() => onEnd(active.id)}>

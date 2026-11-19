@@ -11,7 +11,7 @@ import {
 } from '../lib/stats';
 import type { AppData, Lang } from '../lib/types';
 import { TrendChart } from '../components/Charts';
-import { IconPill, IconSparkles } from '../components/Icons';
+import { IconMedicine, IconSparkles } from '../components/Icons';
 
 interface InsightsViewProps {
   data: AppData;
@@ -295,7 +295,7 @@ export function InsightsView({ data, lang, t, today, onLog }: InsightsViewProps)
                 {meds.map((med) => (
                   <div class="med-row" key={med.id}>
                     <span class="med-icon" aria-hidden="true">
-                      <IconPill size={17} />
+                      <IconMedicine size={17} />
                     </span>
                     <div class="med-main">
                       <div class="med-name">{med.name}</div>

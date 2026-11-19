@@ -22,6 +22,12 @@ Mira 是一个本地优先的偏头痛日历与用药记录应用。它把「记
   <img src="docs/screenshots/10-quiet-mode.png" width="210" alt="静息模式" />
 </p>
 
+<p align="center">
+  <img src="docs/screenshots/11-active-attack.png" width="210" alt="正在发作的实时计时与快速服药" />
+  <img src="docs/screenshots/12-today-en.png" width="210" alt="英文界面" />
+  <img src="docs/screenshots/13-today-ja.png" width="210" alt="日文界面" />
+</p>
+
 ---
 
 ## 为什么是 Mira
