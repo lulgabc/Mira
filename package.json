@@ -20,7 +20,8 @@
     "cap:ios": "cap open ios",
     "cap:android": "cap open android",
     "test:a11y": "node scripts/a11y-check.mjs",
-    "test:responsive": "node scripts/responsive-check.mjs"
+    "test:responsive": "node scripts/responsive-check.mjs",
+    "test:live": "node scripts/live-check.mjs"
   },
   "dependencies": {
     "@capacitor/core": "^8.6.2",

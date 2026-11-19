@@ -168,6 +168,9 @@ pnpm test:offline
 pnpm test:a11y
 pnpm test:responsive
 
+# 线上部署检查（GitHub Pages）
+pnpm test:live
+
 # 重新生成文档截图（需要 Google Chrome）
 pnpm dev &
 pnpm screenshots
@@ -181,6 +184,7 @@ pnpm screenshots
 - `node scripts/offline-check.mjs`：Service Worker 接管页面后断网重载成功，示例数据仍在。
 - `node scripts/a11y-check.mjs`：用 axe-core 检查 11 个页面/状态（欢迎页、今日、日历、洞察、设置、记录弹层，以及深色与静息模式），**WCAG 2 A/AA 违规为 0**。
 - `node scripts/responsive-check.mjs`：在 320 / 375 / 430 / 768 / 1280 px 宽度下检查四个主页面与记录弹层，均无横向溢出。
+- `pnpm test:live`：对线上 GitHub Pages 地址验证页面、Manifest、全部图标、Service Worker 作用域 `/Mira/` 与断网重载，全部通过。
 - 截图与 E2E 脚本使用本机 Google Chrome（`playwright-core` 的 `channel: 'chrome'`）。
 
 ## 移动端安装与原生打包
