@@ -90,6 +90,7 @@ export const de: Messages = {
   'capture.preset.1d': '1 Tag',
   'capture.symptoms': 'Symptome',
   'capture.triggers': 'Mögliche Auslöser',
+  'capture.symptomsTriggers': 'Symptome und Auslöser',
   'capture.meds': 'Medikamente',
   'capture.noMeds': 'Noch keine Medikamente',
   'capture.manageMeds': 'In den Einstellungen hinzufügen',

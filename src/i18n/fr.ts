@@ -91,6 +91,7 @@ export const fr: Messages = {
   'capture.preset.1d': '1 jour',
   'capture.symptoms': 'Symptômes',
   'capture.triggers': 'Facteurs possibles',
+  'capture.symptomsTriggers': 'Symptômes et facteurs',
   'capture.meds': 'Médicaments',
   'capture.noMeds': 'Aucun médicament pour l’instant',
   'capture.manageMeds': 'Ajouter dans les réglages',

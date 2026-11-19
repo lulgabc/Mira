@@ -90,6 +90,7 @@ export const pt: Messages = {
   'capture.preset.1d': '1 dia',
   'capture.symptoms': 'Sintomas',
   'capture.triggers': 'Possíveis gatilhos',
+  'capture.symptomsTriggers': 'Sintomas e gatilhos',
   'capture.meds': 'Medicamentos',
   'capture.noMeds': 'Ainda não há medicamentos',
   'capture.manageMeds': 'Adicionar em Ajustes',

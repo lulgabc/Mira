@@ -49,15 +49,16 @@ await page.locator('.dial').focus();
 await page.keyboard.press('End');
 assert.equal(await page.locator('.dial-value').innerText(), '10');
 await page.getByRole('button', { name: '恶心' }).click();
+await page.getByRole('tab', { name: /可能诱因/ }).click();
 await page.getByRole('button', { name: '压力' }).click();
-await page.locator('.med-picks').scrollIntoViewIfNeeded();
+await page.locator('.chip-grid').last().scrollIntoViewIfNeeded();
 await page.waitForTimeout(150);
 const medScrollBefore = await page.evaluate(() => ({
   dialog: document.querySelector('dialog.sheet')?.scrollTop,
   body: document.querySelector('.sheet-body')?.scrollTop,
   foot: document.querySelector('.sheet-foot')?.getBoundingClientRect().top,
 }));
-await page.locator('.med-option', { hasText: '布洛芬' }).click();
+await page.locator('.chip-grid .chip', { hasText: '布洛芬' }).click();
 await page.waitForTimeout(200);
 const medScrollAfter = await page.evaluate(() => ({
   dialog: document.querySelector('dialog.sheet')?.scrollTop,
@@ -76,8 +77,8 @@ const scrollAfter = await page.evaluate(() => {
 });
 assert.equal(scrollAfter.min, 0);
 assert.ok(scrollAfter.value > 100);
-await page.locator('.med-extra .input').fill('400 mg');
-await page.locator('.med-extra .select').selectOption('2');
+await page.locator('.selected-meds .input').fill('400 mg');
+await page.locator('.selected-meds .select').selectOption('2');
 await page.locator('.sheet-foot .btn-primary').click();
 await page.locator('dialog.sheet').waitFor({ state: 'detached' });
 await page.waitForFunction(() => JSON.parse(localStorage.getItem('mira.data.v1')).episodes.length === 22);

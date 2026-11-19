@@ -88,6 +88,7 @@ export const zh = {
   'capture.preset.1d': '1 天',
   'capture.symptoms': '伴随症状',
   'capture.triggers': '可能诱因',
+  'capture.symptomsTriggers': '症状与诱因',
   'capture.meds': '药物',
   'capture.noMeds': '还没有常用药',
   'capture.manageMeds': '去设置添加',

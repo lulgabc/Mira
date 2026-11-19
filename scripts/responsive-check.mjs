@@ -1,9 +1,10 @@
 import { chromium } from 'playwright-core';
+const BASE = process.env.BASE_URL ?? 'http://localhost:5173/';
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 for (const [w, h] of [[320, 568], [375, 667], [430, 932], [768, 1024], [1280, 900]]) {
   const context = await browser.newContext({ viewport: { width: w, height: h }, locale: 'zh-CN', timezoneId: 'Asia/Shanghai' });
   const page = await context.newPage();
-  await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+  await page.goto(BASE, { waitUntil: 'networkidle' });
   await page.getByRole('button', { name: '先看看示例' }).click();
   await page.waitForTimeout(2500);
   const widths = [];

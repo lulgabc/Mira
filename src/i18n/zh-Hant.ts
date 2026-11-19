@@ -90,6 +90,7 @@ export const zhHant: Messages = {
   'capture.preset.1d': '1 天',
   'capture.symptoms': '伴隨症狀',
   'capture.triggers': '可能誘因',
+  'capture.symptomsTriggers': '症狀與誘因',
   'capture.meds': '藥物',
   'capture.noMeds': '還沒有常用藥',
   'capture.manageMeds': '到設定新增',

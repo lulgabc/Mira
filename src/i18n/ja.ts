@@ -90,6 +90,7 @@ export const ja: Messages = {
   'capture.preset.1d': '1 日',
   'capture.symptoms': '伴う症状',
   'capture.triggers': '考えられるきっかけ',
+  'capture.symptomsTriggers': '症状ときっかけ',
   'capture.meds': '薬',
   'capture.noMeds': 'よく使う薬がありません',
   'capture.manageMeds': '設定で追加',

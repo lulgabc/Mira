@@ -414,6 +414,19 @@ svg {
   flex-wrap: wrap;
   gap: 7px;
 }
+.chip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 6px;
+}
+.chip-grid .chip {
+  justify-content: center;
+  text-align: center;
+  min-height: 38px;
+  padding: 6px 5px;
+  white-space: normal;
+  line-height: 1.25;
+}
 .chip {
   display: inline-flex;
   align-items: center;
@@ -1210,6 +1223,34 @@ svg {
   color: var(--text);
   border-bottom-color: var(--accent);
   font-weight: 600;
+}
+.detail-tabs {
+  margin: 0 0 10px;
+  gap: 16px;
+}
+.detail-tabs button {
+  min-height: 32px;
+  padding-bottom: 7px;
+  font-size: 12.5px;
+}
+.tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text-3);
+  font-size: 9px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.detail-tabs button[aria-selected='true'] .tab-count {
+  background: var(--accent-wash);
+  color: var(--accent-strong);
 }
 .tab-panel {
   min-height: 40px;

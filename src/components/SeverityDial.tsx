@@ -8,15 +8,17 @@ interface SeverityDialProps {
   t: Translate;
 }
 
-const SIZE = 240;
-const CENTER = SIZE / 2;
-const RADIUS = 88;
-const START = 135;
-const SWEEP = 270;
+const WIDTH = 220;
+const HEIGHT = 128;
+const CENTER_X = WIDTH / 2;
+const CENTER_Y = 112;
+const RADIUS = 94;
+const START = 180;
+const SWEEP = 180;
 
 function polar(angle: number, radius = RADIUS): { x: number; y: number } {
   const rad = (angle * Math.PI) / 180;
-  return { x: CENTER + radius * Math.cos(rad), y: CENTER + radius * Math.sin(rad) };
+  return { x: CENTER_X + radius * Math.cos(rad), y: CENTER_Y + radius * Math.sin(rad) };
 }
 
 function arcPath(from: number, to: number): string {
@@ -51,14 +53,14 @@ export function SeverityDial({ value, onChange, t }: SeverityDialProps) {
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0) return;
-    const x = ((event.clientX - rect.left) / rect.width) * SIZE;
-    const y = ((event.clientY - rect.top) / rect.height) * SIZE;
-    const degrees = (Math.atan2(y - CENTER, x - CENTER) * 180) / Math.PI;
+    const x = ((event.clientX - rect.left) / rect.width) * WIDTH;
+    const y = ((event.clientY - rect.top) / rect.height) * HEIGHT;
+    const degrees = (Math.atan2(y - CENTER_Y, x - CENTER_X) * 180) / Math.PI;
     const normalized = (degrees + 360) % 360;
     const relative = (normalized - START + 360) % 360;
     let fraction: number;
     if (relative <= SWEEP) fraction = relative / SWEEP;
-    else fraction = relative > 315 ? 1 : 0;
+    else fraction = relative > 270 ? 0 : 1;
     const next = Math.max(1, Math.min(10, Math.round(1 + fraction * 9)));
     onChange(next);
   };
@@ -104,7 +106,7 @@ export function SeverityDial({ value, onChange, t }: SeverityDialProps) {
       <svg
         ref={svgRef}
         class="dial"
-        viewBox={`0 0 ${SIZE} ${SIZE}`}
+        viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         role="slider"
         tabindex={0}
         aria-label={t('severity.label')}
@@ -133,7 +135,7 @@ export function SeverityDial({ value, onChange, t }: SeverityDialProps) {
           stroke={`url(#${gradientId})`}
           d={arcPath(START, Math.max(START + 0.01, angleForValue(value)))}
         />
-        <circle class="dial-knob" cx={knob.x} cy={knob.y} r={9} />
+        <circle class="dial-knob" cx={knob.x} cy={knob.y} r={7.5} />
       </svg>
       <div class="dial-center" aria-hidden="true">
         <span class="dial-value">{value}</span>

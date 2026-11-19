@@ -7,7 +7,7 @@ import {
   toDateTimeInput,
 } from '../lib/dates';
 import type { AppData, CatalogItem, Episode, EpisodeDraft, EpisodeMed, Lang, Relief } from '../lib/types';
-import { IconCheck, IconClose, IconPlus, IconTrash } from './Icons';
+import { IconClose, IconPlus, IconTrash } from './Icons';
 import { SeverityDial } from './SeverityDial';
 import { Sheet } from './Sheet';
 import { Switch } from './Switch';
@@ -59,6 +59,11 @@ export function EpisodeSheet({
   const [symptomIds, setSymptomIds] = useState<string[]>(episode?.symptomIds ?? []);
   const [triggerIds, setTriggerIds] = useState<string[]>(episode?.triggerIds ?? []);
   const [meds, setMeds] = useState<EpisodeMed[]>(episode?.meds ?? []);
+  const [detailTab, setDetailTab] = useState<'symptoms' | 'triggers'>(
+    episode && episode.symptomIds.length === 0 && episode.triggerIds.length > 0
+      ? 'triggers'
+      : 'symptoms',
+  );
   const [notes, setNotes] = useState(episode?.notes ?? '');
   const [addingMed, setAddingMed] = useState(false);
   const [newMedName, setNewMedName] = useState('');
@@ -170,8 +175,28 @@ export function EpisodeSheet({
           </section>
 
           <section class="form-section">
-            <span class="form-label">{t('capture.when')}</span>
-            <div class={`field-grid${ongoing ? ' single' : ''}`}>
+            <div class="form-label-row time-head">
+              <span class="form-label">{t('capture.when')}</span>
+              <span class="ongoing-control">
+                <span>{t('capture.ongoing')}</span>
+                <Switch
+                  checked={ongoing}
+                  label={t('capture.ongoing')}
+                  onChange={(checked) => {
+                    setOngoing(checked);
+                    setError('');
+                    if (!checked) {
+                      const start = fromDateTimeInput(startInput);
+                      const currentEnd = fromDateTimeInput(endInput);
+                      if (start && (!currentEnd || new Date(currentEnd) <= new Date(start))) {
+                        setEndInput(toDateTimeInput(endAfterMinutes(start, 120)));
+                      }
+                    }
+                  }}
+                />
+              </span>
+            </div>
+            <div class="field-grid single">
               <label class="field">
                 <span>{t('capture.start')}</span>
                 <input
@@ -195,27 +220,6 @@ export function EpisodeSheet({
                 </label>
               )}
             </div>
-            <div class="check-line">
-              <span class="check-line-text">
-                <span class="check-line-title">{t('capture.ongoing')}</span>
-                <span class="check-line-desc">{t('capture.ongoingHint')}</span>
-              </span>
-              <Switch
-                checked={ongoing}
-                label={t('capture.ongoing')}
-                onChange={(checked) => {
-                  setOngoing(checked);
-                  setError('');
-                  if (!checked) {
-                    const start = fromDateTimeInput(startInput);
-                    const currentEnd = fromDateTimeInput(endInput);
-                    if (start && (!currentEnd || new Date(currentEnd) <= new Date(start))) {
-                      setEndInput(toDateTimeInput(endAfterMinutes(start, 120)));
-                    }
-                  }
-                }}
-              />
-            </div>
             {!ongoing && (
               <div class="duration-chips" role="group" aria-label={t('capture.duration')}>
                 {PRESETS.map((preset) => (
@@ -234,46 +238,66 @@ export function EpisodeSheet({
           </section>
 
           <section class="form-section">
-            <span class="form-label">{t('capture.symptoms')}</span>
-            <div class="chips">
-              {visibleSymptoms.map((item) => {
-                const on = symptomIds.includes(item.id);
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    class="chip"
-                    aria-pressed={on}
-                    onClick={() => toggle(item.id, symptomIds, setSymptomIds)}
-                  >
-                    {catalogName('symptom', item, lang)}
-                  </button>
-                );
-              })}
+            <div
+              class="tabs detail-tabs"
+              role="tablist"
+              aria-label={t('capture.symptomsTriggers')}
+            >
+              <button
+                type="button"
+                role="tab"
+                aria-selected={detailTab === 'symptoms'}
+                onClick={() => setDetailTab('symptoms')}
+              >
+                {t('capture.symptoms')}
+                {symptomIds.length > 0 && <span class="tab-count">{symptomIds.length}</span>}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={detailTab === 'triggers'}
+                onClick={() => setDetailTab('triggers')}
+              >
+                {t('capture.triggers')}
+                {triggerIds.length > 0 && <span class="tab-count">{triggerIds.length}</span>}
+              </button>
             </div>
-          </section>
-
-          <section class="form-section">
-            <div class="form-label-row">
-              <span class="form-label">{t('capture.triggers')}</span>
-              <span class="form-optional">{t('common.optional')}</span>
-            </div>
-            <div class="chips">
-              {visibleTriggers.map((item) => {
-                const on = triggerIds.includes(item.id);
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    class="chip"
-                    aria-pressed={on}
-                    onClick={() => toggle(item.id, triggerIds, setTriggerIds)}
-                  >
-                    {catalogName('trigger', item, lang)}
-                  </button>
-                );
-              })}
-            </div>
+            {detailTab === 'symptoms' && (
+              <div class="chip-grid" role="tabpanel">
+                {visibleSymptoms.map((item) => {
+                  const on = symptomIds.includes(item.id);
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      class="chip"
+                      aria-pressed={on}
+                      onClick={() => toggle(item.id, symptomIds, setSymptomIds)}
+                    >
+                      {catalogName('symptom', item, lang)}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            {detailTab === 'triggers' && (
+              <div class="chip-grid" role="tabpanel">
+                {visibleTriggers.map((item) => {
+                  const on = triggerIds.includes(item.id);
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      class="chip"
+                      aria-pressed={on}
+                      onClick={() => toggle(item.id, triggerIds, setTriggerIds)}
+                    >
+                      {catalogName('trigger', item, lang)}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </section>
 
           <section class="form-section">
@@ -308,66 +332,65 @@ export function EpisodeSheet({
               </div>
             )}
             {visibleMeds.length === 0 ? (
-              <p class="no-meds">
-                {t('capture.noMeds')}
-                <br />
-                <span class="faint">{t('capture.manageMeds')}</span>
-              </p>
+              <p class="form-subtle">{t('capture.noMeds')}</p>
             ) : (
-              <div class="med-picks">
+              <div class="chip-grid">
                 {visibleMeds.map((item) => {
-                  const selected = meds.find((med) => med.medId === item.id);
+                  const selected = meds.some((med) => med.medId === item.id);
                   return (
-                    <div key={item.id}>
-                      <label class={`med-option${selected ? ' is-on' : ''}`}>
-                        <input
-                          type="checkbox"
-                          checked={Boolean(selected)}
-                          onChange={() => toggleMed(item)}
-                        />
-                        <span class="med-checkbox" aria-hidden="true">
-                          {selected && <IconCheck size={12} strokeWidth={3} />}
-                        </span>
-                        <span class="med-option-name">{catalogName('med', item, lang)}</span>
-                      </label>
-                      {selected && (
-                        <div class="med-extra">
-                          <label class="field">
-                            <span>{t('capture.dose')}</span>
-                            <input
-                              class="input"
-                              value={selected.dose ?? ''}
-                              placeholder={t('capture.dosePlaceholder')}
-                              onInput={(event) =>
-                                updateMed(item.id, {
-                                  dose: (event.currentTarget as HTMLInputElement).value,
-                                })
-                              }
-                            />
-                          </label>
-                          <label class="field">
-                            <span>{t('capture.relief')}</span>
-                            <select
-                              class="select"
-                              value={selected.relief === undefined ? '' : String(selected.relief)}
-                              onChange={(event) => {
-                                const value = (event.currentTarget as HTMLSelectElement).value;
-                                updateMed(item.id, {
-                                  relief: value === '' ? undefined : (Number(value) as Relief),
-                                });
-                              }}
-                            >
-                              <option value="">—</option>
-                              <option value="0">{t('capture.relief.none')}</option>
-                              <option value="1">{t('capture.relief.some')}</option>
-                              <option value="2">{t('capture.relief.good')}</option>
-                            </select>
-                          </label>
-                        </div>
-                      )}
-                    </div>
+                    <button
+                      key={item.id}
+                      type="button"
+                      class="chip"
+                      aria-pressed={selected}
+                      onClick={() => toggleMed(item)}
+                    >
+                      {catalogName('med', item, lang)}
+                    </button>
                   );
                 })}
+              </div>
+            )}
+            {meds.length > 0 && (
+              <div class="selected-meds">
+                {meds.map((med) => (
+                  <div class="selected-med" key={med.medId}>
+                    <div class="selected-med-name">{med.name}</div>
+                    <div class="med-fields">
+                      <label class="field">
+                        <span>{t('capture.dose')}</span>
+                        <input
+                          class="input"
+                          value={med.dose ?? ''}
+                          placeholder={t('capture.dosePlaceholder')}
+                          onInput={(event) =>
+                            updateMed(med.medId, {
+                              dose: (event.currentTarget as HTMLInputElement).value,
+                            })
+                          }
+                        />
+                      </label>
+                      <label class="field">
+                        <span>{t('capture.relief')}</span>
+                        <select
+                          class="select"
+                          value={med.relief === undefined ? '' : String(med.relief)}
+                          onChange={(event) => {
+                            const value = (event.currentTarget as HTMLSelectElement).value;
+                            updateMed(med.medId, {
+                              relief: value === '' ? undefined : (Number(value) as Relief),
+                            });
+                          }}
+                        >
+                          <option value="">—</option>
+                          <option value="0">{t('capture.relief.none')}</option>
+                          <option value="1">{t('capture.relief.some')}</option>
+                          <option value="2">{t('capture.relief.good')}</option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </section>
