@@ -23,7 +23,7 @@ dialog.sheet {
 dialog.sheet[open] {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: clip;
   animation: sheet-in 0.28s ease;
 }
 dialog.sheet::backdrop,
@@ -70,7 +70,7 @@ dialog.welcome::backdrop {
   flex-direction: column;
   min-height: 0;
   flex: 1;
-  overflow: hidden;
+  overflow: clip;
 }
 .sheet-body {
   flex: 1;
@@ -317,18 +317,18 @@ input[type='datetime-local'] {
   border-radius: var(--radius-xs);
   overflow: hidden;
 }
+.med-picks > div + div {
+  border-top: 1px solid var(--line);
+}
 .med-option {
   display: flex;
   align-items: center;
   gap: 10px;
   min-height: 44px;
   padding: 10px 12px;
-  border-top: 1px solid var(--line);
+  border-top: 0;
   background: transparent;
   cursor: pointer;
-}
-.med-option:first-child {
-  border-top: 0;
 }
 .med-option:hover {
   background: var(--surface-2);
@@ -355,9 +355,9 @@ input[type='datetime-local'] {
   background: var(--accent);
   border-color: var(--accent);
 }
-.med-option:focus-within {
+.med-option input:focus-visible ~ .med-checkbox {
   outline: 2px solid var(--accent);
-  outline-offset: -2px;
+  outline-offset: 2px;
 }
 .med-option-name {
   flex: 1;

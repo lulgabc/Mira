@@ -30,7 +30,17 @@ await page.waitForFunction(() => document.documentElement.lang === 'zh-CN');
 await page.getByRole('button', { name: '先看看示例' }).click();
 await page.waitForFunction(() => JSON.parse(localStorage.getItem('mira.data.v1') || '{}').episodes?.length > 10);
 assert.equal((await data()).episodes.length, 21);
-step('onboarding + sample data');
+const orbAnimation = async () =>
+  page.evaluate(() => {
+    const orb = document.querySelector('.orb');
+    return orb ? getComputedStyle(orb, '::before').animationName : 'none';
+  });
+assert.equal(await orbAnimation(), 'orb-drift-a');
+const orbTransformA = await page.evaluate(() => getComputedStyle(document.querySelector('.orb'), '::before').transform);
+await page.waitForTimeout(600);
+const orbTransformB = await page.evaluate(() => getComputedStyle(document.querySelector('.orb'), '::before').transform);
+assert.notEqual(orbTransformA, orbTransformB);
+step('onboarding + sample data + animated orb');
 
 // Capture a new ongoing attack at severity 10 with symptoms, trigger, and medication.
 await page.locator('.hero-actions .btn-primary').click();
@@ -40,7 +50,32 @@ await page.keyboard.press('End');
 assert.equal(await page.locator('.dial-value').innerText(), '10');
 await page.getByRole('button', { name: '恶心' }).click();
 await page.getByRole('button', { name: '压力' }).click();
+await page.locator('.med-picks').scrollIntoViewIfNeeded();
+await page.waitForTimeout(150);
+const medScrollBefore = await page.evaluate(() => ({
+  dialog: document.querySelector('dialog.sheet')?.scrollTop,
+  body: document.querySelector('.sheet-body')?.scrollTop,
+  foot: document.querySelector('.sheet-foot')?.getBoundingClientRect().top,
+}));
 await page.locator('.med-option', { hasText: '布洛芬' }).click();
+await page.waitForTimeout(200);
+const medScrollAfter = await page.evaluate(() => ({
+  dialog: document.querySelector('dialog.sheet')?.scrollTop,
+  body: document.querySelector('.sheet-body')?.scrollTop,
+  foot: document.querySelector('.sheet-foot')?.getBoundingClientRect().top,
+}));
+assert.equal(medScrollAfter.dialog, 0);
+assert.ok(Math.abs(medScrollAfter.body - medScrollBefore.body) < 2);
+assert.ok(Math.abs(medScrollAfter.foot - medScrollBefore.foot) < 2);
+const scrollAfter = await page.evaluate(() => {
+  const body = document.querySelector('.sheet-body');
+  body.scrollTop = 0;
+  const min = body.scrollTop;
+  body.scrollTop = 120;
+  return { min, value: body.scrollTop };
+});
+assert.equal(scrollAfter.min, 0);
+assert.ok(scrollAfter.value > 100);
 await page.locator('.med-extra .input').fill('400 mg');
 await page.locator('.med-extra .select').selectOption('2');
 await page.locator('.sheet-foot .btn-primary').click();
@@ -53,7 +88,7 @@ assert.deepEqual(created.symptomIds, ['sym-nausea']);
 assert.deepEqual(created.triggerIds, ['trg-stress']);
 assert.equal(created.meds[0].dose, '400 mg');
 assert.equal(created.meds[0].relief, 2);
-step('capture attack with dial + chips + medication');
+step('capture attack with dial + chips + medication (no scroll jump)');
 
 await page.locator('.active-card').waitFor({ state: 'visible' });
 await page.waitForTimeout(1100);
@@ -132,6 +167,7 @@ await page.getByRole('button', { name: '深色' }).click();
 await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
 await page.locator('.header-actions .icon-btn').click();
 await page.waitForFunction(() => document.documentElement.dataset.quiet === 'true');
+assert.equal(await orbAnimation(), 'none');
 await page.getByRole('button', { name: '退出静息模式' }).first().click();
 await page.waitForFunction(() => !document.documentElement.dataset.quiet);
 await page.getByRole('button', { name: '跟随系统' }).click();
