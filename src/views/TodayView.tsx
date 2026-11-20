@@ -108,7 +108,19 @@ export function TodayView({
 
         <section class="quiet-hero">
           <h1 class="quiet-title">{quietTitle}</h1>
-          <p class="quiet-sub">{quietSub}</p>
+          <div class="quiet-meta">
+            <p class="quiet-sub">{quietSub}</p>
+            {active && (
+              <p
+                class="quiet-timer"
+                aria-label={t('today.elapsed', {
+                  duration: formatElapsed(now - new Date(active.start).getTime()),
+                })}
+              >
+                {formatElapsed(now - new Date(active.start).getTime())}
+              </p>
+            )}
+          </div>
           <span class="quiet-rule" style={`--quiet-rule:${quietRule}`} aria-hidden="true" />
         </section>
 
@@ -118,16 +130,6 @@ export function TodayView({
             style={orbColors(quietSeverity, true)}
             aria-hidden="true"
           />
-          {active && (
-            <p
-              class="quiet-timer"
-              aria-label={t('today.elapsed', {
-                duration: formatElapsed(now - new Date(active.start).getTime()),
-              })}
-            >
-              {formatElapsed(now - new Date(active.start).getTime())}
-            </p>
-          )}
         </div>
 
         <div class="quiet-bottom">

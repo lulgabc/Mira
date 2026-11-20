@@ -266,21 +266,28 @@ assert.equal(
   '72s',
 );
 
-// The active timer is a quiet detail inside the orb, not a display headline.
+// The active timer sits on the meta line as semi-transparent bold text.
 await page.locator('.quiet-primary').click();
 await page.locator('dialog.sheet').waitFor({ state: 'visible' });
 await page.locator('.sheet-foot .btn-primary').click();
 await page.locator('.quiet-timer').waitFor({ state: 'visible' });
 const quietOrbActive = await page.locator('.quiet-orb').boundingBox();
+const quietSub = await page.locator('.quiet-sub').boundingBox();
 const quietTimer = await page.locator('.quiet-timer').boundingBox();
-assert.ok(quietOrbActive && quietTimer);
-assert.ok(quietTimer.width < quietOrbActive.width);
-assert.ok(quietTimer.height < quietOrbActive.height);
-assert.ok(
-  (await page
-    .locator('.quiet-timer')
-    .evaluate((el) => Number.parseFloat(getComputedStyle(el).fontSize))) <= 34,
-);
+assert.ok(quietOrbActive && quietSub && quietTimer);
+assert.ok(quietTimer.y < quietOrbActive.y);
+assert.ok(quietTimer.x > quietSub.x);
+assert.ok(Math.abs(quietTimer.y - quietSub.y) <= 12);
+const quietTimerStyle = await page
+  .locator('.quiet-timer')
+  .evaluate((el) => ({
+    fontWeight: Number.parseFloat(getComputedStyle(el).fontWeight),
+    fontSize: Number.parseFloat(getComputedStyle(el).fontSize),
+    opacity: Number.parseFloat(getComputedStyle(el).opacity),
+  }));
+assert.ok(quietTimerStyle.fontWeight >= 600);
+assert.ok(quietTimerStyle.fontSize <= 16);
+assert.ok(quietTimerStyle.opacity < 1);
 await page.locator('.quiet-action', { hasText: '结束发作' }).click();
 await page.waitForTimeout(200);
 
