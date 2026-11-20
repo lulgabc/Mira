@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { CatalogSheet } from './components/CatalogSheet';
 import { EpisodeSheet } from './components/EpisodeSheet';
-import { IconCheck, LogoMark } from './components/Icons';
+import { IconCheck, IconDim, LogoMark } from './components/Icons';
 import { QuickMedSheet } from './components/QuickMedSheet';
 import { WelcomeSheet } from './components/WelcomeSheet';
 import { BottomNav } from './components/BottomNav';
@@ -275,6 +275,18 @@ export function App() {
             <LogoMark size={26} />
           </span>
           <span class="brand-name">Mira</span>
+        </div>
+        <div class="header-actions">
+          <button
+            class="quiet-toggle"
+            type="button"
+            aria-pressed={settings.quiet}
+            aria-label={settings.quiet ? t('a11y.quietOff') : t('a11y.quietOn')}
+            onClick={() => updateSettings({ quiet: !settings.quiet })}
+          >
+            <IconDim size={16} />
+            <span>{t('settings.quiet')}</span>
+          </button>
         </div>
       </header>
 

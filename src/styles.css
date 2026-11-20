@@ -241,6 +241,37 @@ svg {
   align-items: center;
   gap: 8px;
 }
+.quiet-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.quiet-toggle svg {
+  flex: none;
+  opacity: 0.8;
+}
+.quiet-toggle:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+.quiet-toggle[aria-pressed='true'] {
+  color: var(--accent-strong);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  background: var(--accent-wash);
+}
+:root[data-quiet='true'] .quiet-toggle {
+  min-height: 44px;
+  font-size: 13px;
+}
 .icon-btn {
   display: grid;
   place-items: center;
@@ -1567,6 +1598,15 @@ svg {
   .app-shell {
     padding-left: 14px;
     padding-right: 14px;
+  }
+  .quiet-toggle {
+    gap: 4px;
+    padding: 0 9px;
+    font-size: 11px;
+  }
+  .quiet-toggle svg {
+    width: 14px;
+    height: 14px;
   }
   .hero-grid {
     grid-template-columns: 1fr;

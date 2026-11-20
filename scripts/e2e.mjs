@@ -166,7 +166,7 @@ step('language switching zh → en → fr → ja → zh-Hant → zh');
 // Theme + quiet mode.
 await page.getByRole('button', { name: '深色' }).click();
 await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
-await page.getByRole('switch', { name: '静息模式' }).click();
+await page.locator('.quiet-toggle').click();
 await page.waitForFunction(() => document.documentElement.dataset.quiet === 'true');
 assert.equal(await orbAnimation(), 'none');
 await page.getByRole('button', { name: '退出静息模式' }).first().click();
@@ -249,8 +249,7 @@ await page.keyboard.press('Escape');
 step('reject future timestamps');
 
 // Quiet mode persists across reload.
-await page.locator('.bottom-nav button', { hasText: '设置' }).click();
-await page.getByRole('switch', { name: '静息模式' }).click();
+await page.locator('.quiet-toggle').click();
 await page.waitForFunction(() => document.documentElement.dataset.quiet === 'true');
 await page.reload({ waitUntil: 'networkidle' });
 await page.waitForFunction(() => document.documentElement.dataset.quiet === 'true');

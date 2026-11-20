@@ -246,3 +246,13 @@ export function IconPulse(props: IconProps) {
     </Svg>
   );
 }
+
+export function IconDim(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="9.5" r="3.2" />
+      <path d="M12 2.8v1.4M4.6 9.5H3.2M20.8 9.5h-1.4M6.2 3.7l1 1M17.8 3.7l-1 1" />
+      <path d="M12 15v5M9.6 17.6 12 20l2.4-2.4" />
+    </Svg>
+  );
+}
