@@ -81,6 +81,90 @@ export function TodayView({
 
   const greeting = t(`greeting.${greetingKey()}` as const);
 
+  const quietSeverity = active?.severity ?? todayMaxSeverity;
+  const quietTitle = active
+    ? t('today.ongoing')
+    : todayEpisodes.length
+      ? t(
+          todayEpisodes.length === 1 ? 'today.todayCount.one' : 'today.todayCount.other',
+          { n: todayEpisodes.length },
+        )
+      : t('today.quietDay');
+  const quietSub = active
+    ? `${t('today.started', { time: formatTime(active.start, lang) })} · ${t(severityKey(active.severity))}`
+    : todayEpisodes.length && todayLatest
+      ? `${formatTime(todayLatest.start, lang)} · ${t(severityKey(todayMaxSeverity ?? todayLatest.severity))}`
+      : sinceLast
+        ? t(sinceLast === 1 ? 'today.sinceLast.one' : 'today.sinceLast.other', { n: sinceLast })
+        : t('today.firstRecord');
+  const quietRule = quietSeverity
+    ? `var(--sev-${severityBucket(quietSeverity)})`
+    : 'var(--accent)';
+
+  if (quiet) {
+    return (
+      <div class="view today quiet-today">
+        <p class="eyebrow quiet-date">{formatFullDate(new Date(), lang)}</p>
+
+        <section class="quiet-hero">
+          <h1 class="quiet-title">{quietTitle}</h1>
+          <p class="quiet-sub">{quietSub}</p>
+          <span class="quiet-rule" style={`--quiet-rule:${quietRule}`} aria-hidden="true" />
+          {active && (
+            <p
+              class="quiet-timer"
+              aria-label={t('today.elapsed', {
+                duration: formatElapsed(now - new Date(active.start).getTime()),
+              })}
+            >
+              {formatElapsed(now - new Date(active.start).getTime())}
+            </p>
+          )}
+        </section>
+
+        <div class="quiet-bottom">
+          {active ? (
+            <div class="quiet-actions">
+              <button
+                type="button"
+                class="quiet-action"
+                onClick={() => onQuickMeds(active)}
+              >
+                <span class="quiet-plus" aria-hidden="true">
+                  <IconPlus size={16} />
+                </span>
+                <span>{t('today.addMed')}</span>
+                <span class="quiet-arrow" aria-hidden="true">
+                  →
+                </span>
+              </button>
+              <button type="button" class="quiet-action" onClick={() => onEnd(active.id)}>
+                <span>{t('today.end')}</span>
+                <span class="quiet-arrow" aria-hidden="true">
+                  →
+                </span>
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              class="quiet-primary"
+              onClick={() => onLog({ ongoing: true })}
+            >
+              <span class="quiet-plus" aria-hidden="true">
+                <IconPlus size={18} />
+              </span>
+              <span>{t('today.log')}</span>
+              <span class="quiet-arrow" aria-hidden="true">
+                →
+              </span>
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div class="view today">
       <header class="today-head">

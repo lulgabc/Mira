@@ -72,7 +72,7 @@ await page.waitForTimeout(200);
 await page.locator('.quiet-toggle').click();
 await page.waitForTimeout(650);
 await run('today-quiet');
-await page.locator('.hero-actions .btn-primary').click();
+await page.locator('.quiet-primary').click();
 await page.waitForTimeout(650);
 await run('capture-quiet');
 

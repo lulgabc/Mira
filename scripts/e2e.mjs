@@ -254,7 +254,8 @@ await page.waitForFunction(() => document.documentElement.dataset.quiet === 'tru
 assert.equal(await page.locator('.stat-strip').count(), 0);
 assert.equal(await page.locator('.section').count(), 0);
 assert.equal(await page.locator('.quiet-toggle').isVisible(), false);
-assert.match(await page.locator('.today-greeting').getAttribute('class'), /sr-only/);
+assert.equal(await page.locator('.quiet-title').isVisible(), true);
+assert.equal(await page.locator('.quiet-today .card').count(), 0);
 await page.reload({ waitUntil: 'networkidle' });
 await page.waitForFunction(() => document.documentElement.dataset.quiet === 'true');
 assert.equal(await page.locator('.stat-strip').count(), 0);
