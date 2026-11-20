@@ -103,13 +103,21 @@ export function TodayView({
 
   if (quiet) {
     return (
-      <div class="view today quiet-today">
+      <div class={`view today quiet-today${active ? ' is-active' : ''}`}>
         <p class="eyebrow quiet-date">{formatFullDate(new Date(), lang)}</p>
 
         <section class="quiet-hero">
           <h1 class="quiet-title">{quietTitle}</h1>
           <p class="quiet-sub">{quietSub}</p>
           <span class="quiet-rule" style={`--quiet-rule:${quietRule}`} aria-hidden="true" />
+        </section>
+
+        <div class="quiet-orb-stage">
+          <div
+            class={`orb quiet-orb${quietSeverity ? ' is-attack' : ' is-calm'}`}
+            style={orbColors(quietSeverity, true)}
+            aria-hidden="true"
+          />
           {active && (
             <p
               class="quiet-timer"
@@ -120,7 +128,7 @@ export function TodayView({
               {formatElapsed(now - new Date(active.start).getTime())}
             </p>
           )}
-        </section>
+        </div>
 
         <div class="quiet-bottom">
           {active ? (

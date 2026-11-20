@@ -256,6 +256,15 @@ assert.equal(await page.locator('.section').count(), 0);
 assert.equal(await page.locator('.quiet-toggle').isVisible(), false);
 assert.equal(await page.locator('.quiet-title').isVisible(), true);
 assert.equal(await page.locator('.quiet-today .card').count(), 0);
+assert.equal(await page.locator('.quiet-orb').isVisible(), true);
+const quietOrb = await page.locator('.quiet-orb').boundingBox();
+assert.ok(quietOrb && quietOrb.width >= 200);
+assert.equal(
+  await page
+    .locator('.quiet-orb')
+    .evaluate((el) => getComputedStyle(el, '::before').animationDuration),
+  '72s',
+);
 await page.reload({ waitUntil: 'networkidle' });
 await page.waitForFunction(() => document.documentElement.dataset.quiet === 'true');
 assert.equal(await page.locator('.stat-strip').count(), 0);
