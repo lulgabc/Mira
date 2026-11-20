@@ -248,13 +248,20 @@ assert.match(await page.locator('.form-error').innerText(), /现在|未来/);
 await page.keyboard.press('Escape');
 step('reject future timestamps');
 
-// Quiet mode persists across reload.
+// Quiet mode persists across reload and removes secondary content.
 await page.locator('.quiet-toggle').click();
 await page.waitForFunction(() => document.documentElement.dataset.quiet === 'true');
+assert.equal(await page.locator('.stat-strip').count(), 0);
+assert.equal(await page.locator('.section').count(), 0);
+assert.equal(await page.locator('.quiet-toggle').isVisible(), false);
+assert.match(await page.locator('.today-greeting').getAttribute('class'), /sr-only/);
 await page.reload({ waitUntil: 'networkidle' });
 await page.waitForFunction(() => document.documentElement.dataset.quiet === 'true');
+assert.equal(await page.locator('.stat-strip').count(), 0);
 await page.getByRole('button', { name: '退出静息模式' }).first().click();
-step('quiet mode persistence');
+await page.waitForTimeout(200);
+assert.equal(await page.locator('.stat-strip').isVisible(), true);
+step('quiet mode persistence + minimal layout');
 
 // Manifest and icons.
 const manifestUrl = new URL('manifest.webmanifest', BASE);

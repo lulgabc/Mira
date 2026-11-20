@@ -1659,6 +1659,26 @@ svg {
 :root[data-quiet='true'] .orb::after {
   animation: none !important;
 }
+:root[data-quiet='true'] .view.today {
+  min-height: calc(100dvh - 280px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+:root[data-quiet='true'] .quiet-toggle,
+:root[data-quiet='true'] .page-sub,
+:root[data-quiet='true'] .hero-sub,
+:root[data-quiet='true'] .cal-summary,
+:root[data-quiet='true'] .day-panel-sub,
+:root[data-quiet='true'] .insight-sub,
+:root[data-quiet='true'] .metric-foot,
+:root[data-quiet='true'] .chart-note,
+:root[data-quiet='true'] .form-hint,
+:root[data-quiet='true'] .about-version,
+:root[data-quiet='true'] .about-made,
+:root[data-quiet='true'] .quiet-optional {
+  display: none;
+}
 :root[data-quiet='true'] .app-shell {
   font-size: 17px;
 }

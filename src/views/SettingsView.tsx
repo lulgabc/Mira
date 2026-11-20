@@ -131,7 +131,7 @@ export function SettingsView({
       <section class="settings-group">
         <h2 class="settings-group-title">{t('settings.data')}</h2>
         <div class="settings-card">
-          <div class="setting-row">
+          <div class="setting-row quiet-optional">
             <div class="setting-main">
               <div class="setting-desc">{t('settings.dataDesc')}</div>
             </div>

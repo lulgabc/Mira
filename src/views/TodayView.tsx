@@ -86,7 +86,7 @@ export function TodayView({
       <header class="today-head">
         <div>
           <p class="eyebrow today-date">{formatFullDate(new Date(), lang)}</p>
-          <h1 class="today-greeting">
+          <h1 class={`today-greeting${quiet ? ' sr-only' : ''}`}>
             {greeting}
             {lang === 'zh' || lang === 'zh-Hant' || lang === 'ja' ? '。' : '.'}
           </h1>
@@ -161,56 +161,62 @@ export function TodayView({
         </section>
       )}
 
-      <div class="stat-strip" role="group" aria-label={t('today.monthTitle')}>
-        <div>
-          <span class="stat-label">{t('today.attackDays')}</span>
-          <span class="stat-value">
-            {month.attackDays}
-            <small>{t(month.attackDays === 1 ? 'common.day' : 'common.days')}</small>
-          </span>
-        </div>
-        <div>
-          <span class="stat-label">{t('today.avgSeverity')}</span>
-          <span class="stat-value">{month.avgSeverity ?? '—'}</span>
-        </div>
-        <div>
-          <span class="stat-label">{t('today.painFree')}</span>
-          <span class="stat-value">
-            {data.episodes.length === 0 ? '—' : month.painFreeDays}
-            {data.episodes.length > 0 && (
-              <small>{t(month.painFreeDays === 1 ? 'common.day' : 'common.days')}</small>
-            )}
-          </span>
-        </div>
-      </div>
-
-      <section class="section" aria-labelledby="recent-title">
-        <h2 class="section-title" id="recent-title">
-          {t('today.recent')}
-        </h2>
-        {recent.length === 0 ? (
-          <div class="empty-inline">
-            <strong>{t('today.emptyTitle')}</strong>
-            <p>{t('today.emptyBody')}</p>
-            <button class="text-btn" type="button" onClick={onLoadDemo}>
-              {t('today.demoHint')}
-            </button>
-          </div>
-        ) : (
-          <div class="episode-list">
-            {recent.map((episode) => (
-              <EpisodeCard
-                key={episode.id}
-                episode={episode}
-                data={data}
-                lang={lang}
-                t={t}
-                onClick={() => onEdit(episode)}
-              />
-            ))}
-          </div>
+      {!quiet && (
+  <div class="stat-strip" role="group" aria-label={t('today.monthTitle')}>
+    <div>
+      <span class="stat-label">{t('today.attackDays')}</span>
+      <span class="stat-value">
+        {month.attackDays}
+        <small>{t(month.attackDays === 1 ? 'common.day' : 'common.days')}</small>
+      </span>
+    </div>
+    <div>
+      <span class="stat-label">{t('today.avgSeverity')}</span>
+      <span class="stat-value">{month.avgSeverity ?? '—'}</span>
+    </div>
+    <div>
+      <span class="stat-label">{t('today.painFree')}</span>
+      <span class="stat-value">
+        {data.episodes.length === 0 ? '—' : month.painFreeDays}
+        {data.episodes.length > 0 && (
+          <small>{t(month.painFreeDays === 1 ? 'common.day' : 'common.days')}</small>
         )}
-      </section>
+      </span>
+    </div>
+  </div>
+
+      )}
+
+      {!quiet && (
+  <section class="section" aria-labelledby="recent-title">
+    <h2 class="section-title" id="recent-title">
+      {t('today.recent')}
+    </h2>
+    {recent.length === 0 ? (
+      <div class="empty-inline">
+        <strong>{t('today.emptyTitle')}</strong>
+        <p>{t('today.emptyBody')}</p>
+        <button class="text-btn" type="button" onClick={onLoadDemo}>
+          {t('today.demoHint')}
+        </button>
+      </div>
+    ) : (
+      <div class="episode-list">
+        {recent.map((episode) => (
+          <EpisodeCard
+            key={episode.id}
+            episode={episode}
+            data={data}
+            lang={lang}
+            t={t}
+            onClick={() => onEdit(episode)}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+      )}
+
 
     </div>
   );
