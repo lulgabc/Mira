@@ -77,7 +77,11 @@ await page.reload({ waitUntil: 'networkidle' });
 await page.waitForTimeout(250);
 await shot('09-today-dark');
 
-await page.locator('.header-actions .icon-btn').click();
+await page.locator('.bottom-nav button', { hasText: '设置' }).click();
+await page.waitForTimeout(250);
+await page.getByRole('switch', { name: '静息模式' }).click();
+await page.waitForTimeout(250);
+await page.locator('.bottom-nav button', { hasText: '今天' }).click();
 await page.waitForTimeout(250);
 await shot('10-quiet-mode');
 

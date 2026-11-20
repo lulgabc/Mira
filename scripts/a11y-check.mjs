@@ -69,7 +69,11 @@ await page.keyboard.press('Escape');
 await page.waitForTimeout(200);
 
 // Quiet mode.
-await page.locator('.header-actions .icon-btn').click();
+await page.locator('.bottom-nav button', { hasText: '设置' }).click();
+await page.waitForTimeout(250);
+await page.getByRole('switch', { name: '静息模式' }).click();
+await page.waitForTimeout(250);
+await page.locator('.bottom-nav button', { hasText: '今天' }).click();
 await page.waitForTimeout(650);
 await run('today-quiet');
 await page.locator('.hero-actions .btn-primary').click();
