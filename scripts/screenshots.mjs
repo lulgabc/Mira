@@ -98,6 +98,12 @@ await page.waitForTimeout(3200);
 await page.mouse.move(5, 5);
 await shot('11-active-attack');
 
+await page.locator('.quiet-toggle').click();
+await page.waitForTimeout(500);
+await shot('14-quiet-active');
+await page.getByRole('button', { name: '退出静息模式' }).first().click();
+await page.waitForTimeout(200);
+
 // The same day in German and Traditional Chinese.
 await page.locator('.bottom-nav button', { hasText: '设置' }).click();
 await page.locator('.lang-select').selectOption('de');

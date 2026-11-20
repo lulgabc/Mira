@@ -265,6 +265,25 @@ assert.equal(
     .evaluate((el) => getComputedStyle(el, '::before').animationDuration),
   '72s',
 );
+
+// The active timer is a quiet detail inside the orb, not a display headline.
+await page.locator('.quiet-primary').click();
+await page.locator('dialog.sheet').waitFor({ state: 'visible' });
+await page.locator('.sheet-foot .btn-primary').click();
+await page.locator('.quiet-timer').waitFor({ state: 'visible' });
+const quietOrbActive = await page.locator('.quiet-orb').boundingBox();
+const quietTimer = await page.locator('.quiet-timer').boundingBox();
+assert.ok(quietOrbActive && quietTimer);
+assert.ok(quietTimer.width < quietOrbActive.width);
+assert.ok(quietTimer.height < quietOrbActive.height);
+assert.ok(
+  (await page
+    .locator('.quiet-timer')
+    .evaluate((el) => Number.parseFloat(getComputedStyle(el).fontSize))) <= 34,
+);
+await page.locator('.quiet-action', { hasText: '结束发作' }).click();
+await page.waitForTimeout(200);
+
 await page.reload({ waitUntil: 'networkidle' });
 await page.waitForFunction(() => document.documentElement.dataset.quiet === 'true');
 assert.equal(await page.locator('.stat-strip').count(), 0);
